@@ -9,3 +9,14 @@
 
 .arrow-icon{vertical-align:middle;display:inline-block;flex-shrink:0}.world-scene>img{transform:scale(1.55);transform-origin:40% 68%}.footer a .arrow-icon{width:11px;height:11px}.text-link .arrow-icon{margin-left:8px}
 @media(max-width:360px){body{min-width:0}.hero h1{font-size:36px}.player-label{gap:7px}.tag-small{font-size:9px}.console-bottom{gap:10px}.world-caption strong{font-size:10px}.katha-card{width:135px}.katha-card>small{font-size:6px}}
+
+.value-section { padding-top: 68px; }
+.value-section .section-intro > p { max-width: 430px; }
+.value-points { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px; border-bottom: 1px solid var(--line); padding-bottom: 48px; }
+.value-symbol { display: block; color: var(--purple); font-size: 26px; margin-bottom: 14px; }
+.value-points h3 { font-size: 22px; letter-spacing: -.03em; line-height: 1.25; }
+.value-points p { font-size: 13px; color: var(--muted); line-height: 1.8; margin: 15px 0 20px; }
+.value-points a { font-size: 11px; color: #5a409f; font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
+.hero h1 { font-size: clamp(42px, 4.1vw, 62px); }
+@media(max-width:760px) { .value-section { padding-top: 45px; } .value-points { grid-template-columns: 1fr; gap: 28px; padding-bottom: 35px; } .value-points article { max-width: 550px; } .value-points h3 { font-size: 24px; } .hero h1 { font-size: clamp(36px, 8vw, 55px); } }
+@media(max-width:360px) { .hero h1 { font-size: 33px; } }
