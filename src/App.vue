@@ -1,24 +1,28 @@
 <script setup lang="ts">
 import { computed, ref, onBeforeUnmount } from 'vue'
-import { projects } from './featured'
-import { archive } from './projects'
+import { catalog, activityLabel, type CatalogProject } from './catalog'
 import ExperienceSection from './sections/ExperienceSection/ExperienceSection.vue'
 import EducationSection from './sections/EducationSection/EducationSection.vue'
 import CertificationsSection from './sections/CertificationsSection/CertificationsSection.vue'
 import HackathonsSection from './sections/HackathonsSection/HackathonsSection.vue'
 
-const base = import.meta.env.BASE_URL
-const showcase = ['game', 'esports', 'aadi'].map(id => projects.find(p => p.id === id)!)
-const preview = ref(showcase[0]!)
-type Project = typeof projects[number]
+import portrait from './assets/me.png'
+const katha = catalog.find(p => p.id === 'katha')!
 const filter = ref('All projects')
-const filtered = computed(() => filter.value === 'All projects' ? projects : projects.filter(p => p.category === filter.value))
-const detail = ref<Project | null>(null)
+const search = ref('')
+const filtered = computed(() => {
+  const query = search.value.trim().toLowerCase()
+  return catalog.filter(p =>
+    (filter.value === 'All projects' || p.category === filter.value) &&
+    [p.title, p.description, ...p.tags].join(' ').toLowerCase().includes(query)
+  )
+})
+const detail = ref<CatalogProject | null>(null)
 const dialog = ref<HTMLDialogElement | null>(null)
 const menuOpen = ref(false)
 
 let opener: HTMLElement | null = null
-function inspect(project: Project) {
+function inspect(project: CatalogProject) {
  opener = document.activeElement as HTMLElement
  detail.value = project
  dialog.value?.showModal()
@@ -48,37 +52,33 @@ const tools = [{name:'Frontend',items:'Vue · React · JavaScript · HTML & CSS'
           <p class="lede">I turn complex workflows into software people can use. I build web apps for teams and local communities, and games that bring people together.</p>
           <div class="actions"><a class="button" href="#projects">Explore my work <span>↓</span></a><a class="inline-link" href="https://github.com/Aldrin4197">GitHub ↗</a></div>
         </div>
-        <div class="showcase">
-          <div class="viewer"><div class="viewer-bar"><span><b aria-hidden="true">&gt;_</b> PROJECT PREVIEW</span><span aria-hidden="true">● ● ●</span></div>
-          <button class="frame" @click="inspect(preview)" :aria-label="'Inspect '+preview.title"><img :src="base+'projects/'+preview.image+'.webp'" :alt="preview.title+' interface'" fetchpriority="high"></button>
-          <div class="readout"><span>{{ preview.title }}</span><button @click="inspect(preview)">Inspect ↗</button></div></div>
-          <div class="switcher" aria-label="Featured project previews"><button v-for="p in showcase" :key="p.id" :aria-pressed="preview.id === p.id" @click="preview = p">{{ p.short }}</button></div>
-        </div>
+        <figure class="hero-portrait"><img :src="portrait" alt="Graduation portrait of Aldrin Jay Delos Reyes" width="820" height="1063" fetchpriority="high"></figure>
       </div>
     </section>
     <div class="stack-strip"><div class="wrap"><span>Core stack</span><b>Laravel</b><b>Vue.js</b><b>Flutter</b><b>MySQL</b></div></div>
     <section id="projects" class="work wrap">
-      <div class="section-head"><h2>Selected builds<span class="dot">.</span></h2><div class="filters" aria-label="Project categories"><button v-for="category in ['All projects','Web apps','Mobile','Games','Tabletop']" :key="category" :aria-pressed="category === filter" @click="filter = category">{{ category }}</button></div></div>
+      <div class="section-head"><h2>Project catalog<span class="dot">.</span></h2><label class="search-field">Search projects<input v-model="search" type="search" placeholder="Name, tool, or keyword"></label></div>
+      <div class="catalog-controls"><div class="filters" aria-label="Project categories"><button v-for="category in ['All projects','Web apps','Mobile','Games','Tabletop','Hardware']" :key="category" :aria-pressed="category === filter" @click="filter = category">{{ category }}</button></div>
+      <small aria-live="polite">{{ filtered.length }} of {{ catalog.length }} · Latest activity first</small></div>
+      <p v-if="!filtered.length" class="empty">No matching projects. <button @click="search = ''; filter = 'All projects'">Reset filters</button></p>
       <div class="gallery">
         <article v-for="project in filtered" :key="project.id" class="entry">
           <button class="project-button" @click="inspect(project)" :aria-label="'View '+project.title">
             <span class="cover" :class="project.id">
-              <img v-if="project.image" :src="base+'projects/'+project.image+'.webp'" alt="" loading="lazy"/>
+              <img v-if="project.image" :src="project.image" alt="" loading="lazy"/>
               <span v-else-if="project.id === 'katha'" class="foil">KATHA</span>
               <span v-else class="photobooth">Amari’s <i>Photobooth</i></span>
             </span>
             <span class="entry-title">{{ project.title }}<span aria-hidden="true">↗</span></span>
           </button>
-          <p>{{ project.category }}<span v-if="['color','katha'].includes(project.id)"> · {{ project.status }}</span></p>
+          <p>{{ activityLabel(project.activity) }} · {{ project.category }}<span v-if="['color','katha'].includes(project.id)"> · {{ project.status }}</span></p>
+          <div class="catalog-desc">{{ project.description }}</div>
         </article>
       </div>
-      <details class="archive"><summary>Earlier projects <span>{{ archive.length }} projects</span></summary>
-        <div class="archive-grid"><article v-for="p in archive" :key="p.title"><img :src="p.img" :alt="p.title" loading="lazy"/><div><h3>{{ p.title }}</h3><p>{{ p.desc }}</p><small>{{ p.tags.join(' · ') }}</small></div></article></div>
-      </details>
     </section>
     <section id="katha" class="feature">
       <div class="wrap feature-inner">
-        <div><p class="byline">Tabletop game in development</p><h2>KATHA</h2><p class="feature-copy">I’m turning Philippine folklore into a game you can gather around. Players encounter creatures, legends, and events across a shared board. A digital prototype lets me playtest each change.</p><button class="feature-link" @click="inspect(projects[6]!)">Explore the game ↗</button></div>
+        <div><p class="byline">Tabletop game in development</p><h2>KATHA</h2><p class="feature-copy">I’m turning Philippine folklore into a game you can gather around. Players encounter creatures, legends, and events across a shared board. A digital prototype lets me playtest each change.</p><button class="feature-link" @click="inspect(katha)">Explore the game ↗</button></div>
         <div class="deck" aria-hidden="true"><div class="playing-card"></div><div class="playing-card"></div><div class="playing-card"><span>KATHA</span><b>✷</b><span>Philippine folklore</span></div></div>
       </div>
     </section>
@@ -96,7 +96,7 @@ const tools = [{name:'Frontend',items:'Vue · React · JavaScript · HTML & CSS'
   <footer class="wrap"><a class="wordmark" href="#home">drindlr.</a><div><a href="https://github.com/Aldrin4197">GitHub ↗</a><a href="https://www.linkedin.com/in/aldrin-jay-delos-reyes-559817267/">LinkedIn ↗</a><a href="https://www.facebook.com/drindlr">Facebook ↗</a></div></footer>
   <dialog ref="dialog" aria-labelledby="detail-title" @close="afterClose" @click="event => { if(event.target === dialog) closeDialog() }">
     <div v-if="detail" class="dialog-content"><button class="close" autofocus @click="closeDialog" aria-label="Close project">Close ×</button>
-      <img v-if="detail.image" class="detail-image" :src="base+'projects/'+detail.image+'.webp'" :alt="detail.title+' interface'"/>
+      <img v-if="detail.image" class="detail-image" :src="detail.image" :alt="detail.title+' interface'"/>
       <div class="dialog-copy"><small>{{ detail.category }} · {{ detail.status }}</small><h2 id="detail-title">{{ detail.title }}</h2><p>{{ detail.description }}</p><small>{{ detail.tags.join(' · ') }}</small>
         <a v-if="detail.url" class="button" :href="detail.url" target="_blank" rel="noopener noreferrer">Visit project ↗</a><a v-else class="button" :href="'mailto:aldrinjay.delosreyes17@gmail.com?subject='+encodeURIComponent(detail.title)">Ask about this project ↗</a>
       </div>
