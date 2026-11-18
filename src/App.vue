@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, ref, onBeforeUnmount } from 'vue'
+import { computed, ref, watch, onBeforeUnmount } from 'vue'
 import { catalog, activityLabel, type CatalogProject } from './catalog'
+import { reviews } from './reviews'
 import ExperienceSection from './sections/ExperienceSection/ExperienceSection.vue'
 import EducationSection from './sections/EducationSection/EducationSection.vue'
 import CertificationsSection from './sections/CertificationsSection/CertificationsSection.vue'
@@ -19,6 +20,15 @@ const filtered = computed(() => {
     [p.title, p.description, ...p.tags].join(' ').toLowerCase().includes(query)
   )
 })
+const pageSize = 3
+const limit = ref(pageSize)
+watch([search, filter], () => { limit.value = pageSize })
+const visible = computed(() => filtered.value.slice(0, limit.value))
+const offers = [
+  { title: 'Build a web or mobile product', copy: 'Give customers a place to find, compare, or book what you offer. I build the interface and the system behind it.', project: 'aadi' },
+  { title: 'Simplify a team workflow', copy: 'Replace scattered requests and manual follow-ups with a tool your team can use to track each task from intake to resolution.', project: 'ssu-helpdesk' },
+  { title: 'Design a match broadcast', copy: 'Give viewers a clear read on the draft, the score, and the standout player with OBS graphics tailored to your event.', project: 'overlays' },
+].map(offer => ({ ...offer, example: catalog.find(p => p.id === offer.project)! }))
 const detail = ref<CatalogProject | null>(null)
 const dialog = ref<HTMLDialogElement | null>(null)
 const menuOpen = ref(false)
@@ -33,7 +43,7 @@ function inspect(project: CatalogProject) {
 function closeDialog() { dialog.value?.close() }
 function afterClose() { document.body.style.overflow = ''; opener?.focus() }
 onBeforeUnmount(() => { document.body.style.overflow = '' })
-const tools = [{name:'Frontend',items:'Vue · React · JavaScript · HTML & CSS'}, {name:'Backend',items:'Laravel · PHP · Node.js · REST APIs'}, {name:'Data',items:'MySQL · PostgreSQL · MongoDB'}, {name:'Hardware',items:'Arduino · Raspberry Pi · Embedded systems'}]
+const tools = [{name:'Frontend',items:'Vue · React · JavaScript · HTML & CSS'},{name:'Mobile',items:'Flutter'}, {name:'Backend',items:'Laravel · PHP · Node.js · REST APIs'}, {name:'Data',items:'MySQL · PostgreSQL · MongoDB'}, {name:'Hardware',items:'Arduino · Raspberry Pi · Embedded systems'},{name:'Design & production',items:'Figma · OBS Studio'}]
 </script>
 
 <template>
@@ -42,7 +52,7 @@ const tools = [{name:'Frontend',items:'Vue · React · JavaScript · HTML & CSS'
     <a href="#home" class="wordmark" aria-label="Drindlr home"><span class="monogram" aria-hidden="true">&gt;_</span>drindlr.</a>
     <button class="menu-button" aria-controls="menu" :aria-expanded="menuOpen" @click="menuOpen = !menuOpen">{{ menuOpen ? 'Close' : 'Menu' }}</button>
     <nav id="menu" :class="{ open: menuOpen }" aria-label="Primary navigation" @click="menuOpen = false">
-      <a href="#projects">Work</a><a href="#about">About</a><a href="#katha">KATHA</a><a class="nav-contact" href="#contact">Get in touch ↗</a>
+      <a href="#services">Services</a><a href="#projects">Work</a><a href="#about">About</a><a href="#reviews">Reviews</a><a class="nav-contact" href="#contact">Get in touch ↗</a>
     </nav>
   </header>
   <main id="main">
@@ -51,20 +61,26 @@ const tools = [{name:'Frontend',items:'Vue · React · JavaScript · HTML & CSS'
         <div class="intro-copy">
           <p class="byline"><i aria-hidden="true"></i> Full-stack developer / Catbalogan, PH</p>
           <h1 id="intro-title">Aldrin Jay<br><em>Delos Reyes.</em></h1>
-          <p class="lede">I turn complex workflows into software people can use. I build web apps for teams and local communities, and games that bring people together.</p>
-          <div class="actions"><a class="button" href="#projects">Explore my work <span>↓</span></a><a class="inline-link" href="https://github.com/Aldrin4197">GitHub ↗</a></div>
+          <p class="lede">I help teams turn everyday problems into software people can use. Whether you need a booking site, an internal tracking tool, or graphics for match day, I can take it from the first sketch to a working build.</p>
+          <div class="actions"><a class="button" href="#contact">Discuss your project ↗</a><a class="inline-link" href="#projects">Explore my work ↓</a></div>
         </div>
         <figure class="hero-portrait"><img :src="portrait" alt="Graduation portrait of Aldrin Jay Delos Reyes" width="820" height="1063" fetchpriority="high"></figure>
       </div>
     </section>
-    <div class="stack-strip"><div class="wrap"><span>Core stack</span><b>Laravel</b><b>Vue.js</b><b>Flutter</b><b>MySQL</b></div></div>
+    <section id="services" class="offer-section wrap">
+      <h2>What I can build for you<span class="dot">.</span></h2>
+      <div class="offer-grid"><article v-for="offer in offers" :key="offer.title">
+        <h3>{{ offer.title }}</h3><p>{{ offer.copy }}</p>
+        <button class="proof-link" @click="inspect(offer.example)">See {{ offer.example.title }} ↗</button>
+      </article></div>
+    </section>
     <section id="projects" class="work wrap">
       <div class="section-head"><h2>Project catalog<span class="dot">.</span></h2><label class="search-field">Search projects<input v-model="search" type="search" placeholder="Name, tool, or keyword"></label></div>
       <div class="catalog-controls"><div class="filters" aria-label="Project categories"><button v-for="category in ['All projects','Web apps','Mobile','Games','Hardware','Tabletop','Non-dev projects']" :key="category" :aria-pressed="category === filter" @click="filter = category">{{ category }}</button></div>
-      <small aria-live="polite">{{ filtered.length }} of {{ catalog.length }} · Latest activity first</small></div>
+      <small aria-live="polite">Showing {{ visible.length }} of {{ filtered.length }} · Latest activity first</small></div>
       <p v-if="!filtered.length" class="empty">No matching projects. <button @click="search = ''; filter = 'All projects'">Reset filters</button></p>
-      <div class="gallery">
-        <article v-for="project in filtered" :key="project.id" class="entry">
+      <div class="gallery" id="project-results">
+        <article v-for="project in visible" :key="project.id" class="entry">
           <button class="project-button" @click="inspect(project)" :aria-label="'View '+project.title">
             <span class="cover" :class="project.id">
               <img v-if="project.image" :src="project.image" alt="" loading="lazy"/>
@@ -79,6 +95,10 @@ const tools = [{name:'Frontend',items:'Vue · React · JavaScript · HTML & CSS'
           <div class="catalog-desc">{{ project.description }}</div>
         </article>
       </div>
+      <div class="more-row" v-if="filtered.length > pageSize">
+        <button class="more" v-if="visible.length < filtered.length" aria-controls="project-results" @click="limit += pageSize">See more projects ↓</button>
+        <a v-else class="more" href="#projects" @click="limit = pageSize">Show fewer projects ↑</a>
+      </div>
     </section>
     <section id="katha" class="feature">
       <div class="wrap feature-inner">
@@ -91,11 +111,18 @@ const tools = [{name:'Frontend',items:'Vue · React · JavaScript · HTML & CSS'
       <div class="about-copy"><p class="statement">I start with the person doing the work, then build the system around them.</p>
         <p>At Samar State University, that has meant tools for managing employee records, tracking documents, and handling support requests. My electronics and firmware background helps me follow a problem across the interface, database, and device.</p>
         <p>Interaction design matters just as much. In Aadi, a map helps people compare nearby rentals. In Stria, a daily check-in makes the next action clear.</p>
-        <dl><div v-for="item in tools" :key="item.name"><dt>{{ item.name }}</dt><dd>{{ item.items }}</dd></div></dl>
+
       </div>
       <details class="career"><summary>Experience, education & credentials <span>View details</span></summary><div class="history"><ExperienceSection/><EducationSection/><CertificationsSection/><HackathonsSection/></div></details>
     </section>
-    <section id="contact" class="contact"><div class="wrap"><h2>What are you<br><em>working on?</em></h2><div><p>Tell me about the workflow you want to improve or the product you’re trying to build.</p><a class="button" href="mailto:aldrinjay.delosreyes17@gmail.com">Email Aldrin ↗</a></div></div></section>
+    <section id="stack" class="stack-section"><div class="wrap stack-layout"><h2>My tech stack<span class="dot">.</span></h2>
+      <dl><div v-for="tool in tools" :key="tool.name"><dt>{{ tool.name }}</dt><dd>{{ tool.items }}</dd></div></dl></div></section>
+    <section id="reviews" class="reviews wrap"><h2>What people say<span class="dot">.</span></h2>
+      <div class="review-grid"><figure v-for="r in reviews" :key="r.name">
+        <blockquote>“{{ r.text }}”</blockquote><figcaption><span class="review-avatar" aria-hidden="true">{{ r.name.split(' ').map(n => n[0]).join('') }}</span><span><strong>{{ r.name }}</strong><small>{{ r.date }}</small></span><span class="review-stars" :aria-label="r.rating + ' out of 5 stars'">{{ '★'.repeat(r.rating) }}</span></figcaption>
+      </figure></div>
+    </section>
+    <section id="contact" class="contact"><div class="wrap"><h2>What are you<br><em>working on?</em></h2><div><p>Tell me who it’s for, what you want to make easier, and when you need it. We can work out what the first version should do.</p><a class="button" href="mailto:aldrinjay.delosreyes17@gmail.com">Email Aldrin ↗</a></div></div></section>
   </main>
   <footer class="wrap"><a class="wordmark" href="#home">drindlr.</a><div><a href="https://github.com/Aldrin4197">GitHub ↗</a><a href="https://www.linkedin.com/in/aldrin-jay-delos-reyes-559817267/">LinkedIn ↗</a><a href="https://www.facebook.com/drindlr">Facebook ↗</a></div></footer>
   <dialog ref="dialog" aria-labelledby="detail-title" @close="afterClose" @click="event => { if(event.target === dialog) closeDialog() }">

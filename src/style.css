@@ -129,3 +129,22 @@ h1 em,h2 em { font-family:inherit; font-weight:inherit; font-style:normal; color
 .broadcast-cover { width:100%; border-block:2px solid #5291ff; padding:5% 2%; display:grid; gap:4px; color:#f4f7ff; }
 .broadcast-cover i,.broadcast-cover span { font:11px var(--mono); text-transform:uppercase; letter-spacing:.1em; }
 .broadcast-cover i { color:#ffac9c; }.broadcast-cover b { font:700 clamp(32px,4vw,65px)/1 Condensed,sans-serif; text-transform:uppercase; }
+
+.cover.perchwise,.app-screens { background:#132338; }
+.app-pair,.app-screens { display:flex; justify-content:center; gap:6%; }
+.app-pair { height:100%; width:100%; min-height:0; }
+.app-pair img { width:auto; max-width:46%; height:100%; object-fit:contain; }
+.app-screens { padding:32px 20px 16px; clear:both; }
+.app-screens figure { width:min(42%,180px); }
+.app-screens img { width:100%; height:auto; }
+.app-screens figcaption { padding-top:8px; font:12px var(--mono); color:#cfdbed; text-align:center; }
+.offer-section,.reviews,.stack-section { padding-block:clamp(40px,5vw,76px); }
+.offer-grid,.review-grid { display:grid; gap:22px; margin-top:28px; }
+.offer-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.offer-grid article { border-top:3px solid #467eee; background:linear-gradient(150deg,#142239,#0c1524); padding:24px; display:flex; flex-direction:column; align-items:flex-start; }
+.offer-grid h3 { font:700 clamp(23px,2vw,32px)/1.08 Condensed,sans-serif; }.offer-grid p { margin:14px 0 20px; color:#bac6d9; }
+.proof-link { border:0; background:transparent; padding:7px 0; margin-top:auto; text-align:left; color:#96b8ff; font-weight:650; }
+.more-row { display:flex; justify-content:center; margin-top:30px; }.more { background:#162945; color:#e7efff; border:1px solid #47699c; padding:12px 22px; font:13px var(--mono); }
+.stack-section { background:#101b2d; border-block:1px solid var(--rule); }.stack-layout { display:grid; grid-template-columns:1fr 1.3fr; gap:28px; }.stack-section dl>div { grid-template-columns:minmax(110px,.55fr) 1fr; padding:13px 0; }.stack-section dt { color:#99baff; }
+.review-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }.review-grid figure { padding:22px; border:1px solid #34445e; display:grid; align-content:space-between; gap:20px; }.review-grid blockquote { margin:0; font-size:18px; }.review-grid figcaption { display:flex; align-items:center; gap:12px; }.review-grid small { display:block; color:var(--secondary); }.review-avatar { width:40px;height:40px;display:grid;place-items:center;border-radius:50%;background:#304d77;font:600 14px var(--mono); }.review-grid figure:nth-child(even) .review-avatar { background:#335753; }.review-stars { margin-left:auto; font-size:13px; color:#f2c36c; }
+@media(max-width:760px){.offer-grid,.stack-layout,.review-grid {grid-template-columns:minmax(0,1fr);}.offer-grid,.review-grid {gap:12px;}.offer-grid article,.review-grid figure {padding:18px;}}
