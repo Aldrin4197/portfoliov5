@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AmbientBackground from "./components/AmbientBackground.vue"
 import { computed, ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { catalog, activityLabel, type CatalogProject } from './catalog'
 import { reviews } from './reviews'
@@ -64,6 +65,7 @@ const tools = [{name:'Frontend',items:'Vue · React · JavaScript · HTML & CSS'
 </script>
 
 <template>
+  <AmbientBackground />
   <a class="skip" href="#main">Skip to content</a>
   <div class="shell" id="home"><header class="profile">
     <div><h1>Aldrin Jay <br>Delos Reyes</h1><p class="role">Full-stack developer</p>
