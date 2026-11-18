@@ -70,6 +70,7 @@ const tools = [{name:'Frontend',items:'Vue · React · JavaScript · HTML & CSS'
               <img v-if="project.image" :src="project.image" alt="" loading="lazy"/>
               <span v-else-if="project.id === 'katha'" class="foil">KATHA</span>
               <span v-else-if="project.id === 'overlays'" class="broadcast-cover" aria-hidden="true"><i>● ON AIR</i><b>Matchday</b><span>Broadcast overlays</span></span>
+              <span v-else-if="project.id === 'perchwise'" class="entry-title">PerchWise</span>
               <span v-else class="photobooth">Amari’s <i>Photobooth</i></span>
             </span>
             <span class="entry-title">{{ project.title }}<span aria-hidden="true">↗</span></span>
