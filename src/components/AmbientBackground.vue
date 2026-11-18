@@ -2,17 +2,23 @@
 import { onMounted, onBeforeUnmount, ref } from 'vue'
 
 const light = ref<HTMLDivElement | null>(null)
-// Coordinates are local to each trace so their angles stay crisp at any viewport size.
-const traces = [
-  { x: 1, y: 12, route: '0,50 34,50 67,17 144,17', end: [144,17] },
-  { x: 72, y: 3, route: '0,50 45,50 75,20 122,20', end: [122,20] },
-  { x: 39, y: 28, route: '0,50 54,50 84,80 150,80', end: [150,80] },
-  { x: 89, y: 36, route: '0,50 48,50 80,18 130,18', end: [130,18] },
-  { x: 5, y: 63, route: '0,50 65,50 94,21 146,21', end: [146,21] },
-  { x: 58, y: 74, route: '0,50 40,50 68,78 134,78', end: [134,78] },
-  { x: 22, y: 88, route: '0,50 32,50 70,12 138,12', end: [138,12] },
-  { x: 82, y: 92, route: '0,50 60,50 88,22 142,22', end: [142,22] },
+// Each bank fans out from a common bus, with 45-degree turns on a six-unit grid.
+const banks = [
+  { x: -4, y: 8, angle: 0 }, { x: 30, y: -4, angle: 90 },
+  { x: 76, y: 3, angle: 180 }, { x: 93, y: 27, angle: 90 },
+  { x: 36, y: 37, angle: 180 }, { x: -9, y: 53, angle: 0 },
+  { x: 70, y: 66, angle: 180 }, { x: 92, y: 83, angle: 180 },
+  { x: 12, y: 91, angle: 0 },
 ]
+const lanes = Array.from({ length: 5 }, (_, i) => {
+  const start = 12 + i * 6
+  const bend = 42 + i * 3
+  const end = 192 - i * 6
+  return {
+    start, end, finish: start + 30,
+    route: `M8 ${start} H${bend} l24 24 h48 l6 6 H${end}`,
+  }
+})
 
 let frame = 0
 let x = 0
@@ -60,13 +66,16 @@ onBeforeUnmount(() => {
 <template>
   <div class="ambient" aria-hidden="true">
     <div ref="light" class="cursor-glow"></div>
-    <svg v-for="(trace, index) in traces" :key="trace.route" class="trace"
-      viewBox="-4 0 160 90" focusable="false"
-      :style="{ left: trace.x + '%', top: trace.y + '%', '--delay': -index * 1.9 + 's', '--duration': (9 + index % 4) + 's' }">
-      <polyline :points="trace.route" class="wire" />
-      <circle cx="0" cy="50" r="2" class="node" />
-      <circle :cx="trace.end[0]" :cy="trace.end[1]" r="2" class="node" />
-      <polyline :points="trace.route" pathLength="100" class="signal" />
+    <svg v-for="(bank, index) in banks" :key="index" class="trace-bank"
+      viewBox="0 0 200 84" focusable="false"
+      :style="{ left: bank.x + '%', top: bank.y + '%', transform: 'rotate(' + bank.angle + 'deg)' }">
+      <rect x="2" y="8" width="6" height="32" rx="1" class="bus"/>
+      <g v-for="(lane, i) in lanes" :key="i">
+        <path :d="lane.route" class="wire"/>
+        <circle :cx="lane.end + 2" :cy="lane.finish" r="2" class="via"/>
+        <path v-if="i !== 2" :d="lane.route" class="signal" pathLength="100"
+          :style="{ '--delay': -(index * 1.7 + i * 2.8) + 's', '--duration': (8 + (index + i) % 5) + 's' }" />
+      </g>
     </svg>
   </div>
 </template>
@@ -74,17 +83,21 @@ onBeforeUnmount(() => {
 <style scoped>
 .ambient { position:fixed; inset:0; overflow:hidden; pointer-events:none; z-index:-1; }
 .cursor-glow { position:absolute; left:0; top:0; width:clamp(420px,70vw,940px); aspect-ratio:1; opacity:0; transition:opacity 240ms ease; background:radial-gradient(circle, rgb(63 132 157 / 18%),rgb(68 111 159 / 8%) 39%,transparent 70%); }
-.trace { position:absolute; width:clamp(108px,12vw,180px); overflow:visible; }
-.trace polyline { fill:none; stroke-linecap:round; stroke-linejoin:round; }
-.wire { stroke:rgb(131 221 207 / 13%); stroke-width:1; }
-.node { fill:var(--bg); stroke:rgb(131 221 207 / 30%); stroke-width:1; }
-.signal { stroke:rgb(156 235 222 / 52%); stroke-width:1.6; stroke-dasharray:3 107;
+.trace-bank { position:absolute; width:clamp(170px,19vw,310px); overflow:visible; }
+.trace-bank path { fill:none; stroke-linecap:round; stroke-linejoin:round; }
+.wire { stroke:rgb(118 178 188 / 14%); stroke-width:.75; }
+.bus,.via { fill:var(--bg); stroke:rgb(128 197 198 / 24%); stroke-width:.9; }
+.signal { stroke:#9ce5d9; stroke-width:1.6; stroke-dasharray:1.8 104;
   animation:transmit var(--duration) linear var(--delay) infinite; }
 @keyframes transmit {
-  0% { stroke-dashoffset:3; opacity:0; }
-  6% { opacity:1; }
-  62%,100% { stroke-dashoffset:-100; opacity:0; }
+  0% { stroke-dashoffset:2; opacity:0; }
+  10% { opacity:.49; }
+  57% { opacity:.37; }
+  68%,100% { stroke-dashoffset:-100; opacity:0; }
 }
-@media(prefers-reduced-motion:reduce) { .signal,.cursor-glow { display:none; animation:none; } }
-@media(max-width:700px) { .trace:nth-of-type(even) { display:none; } }
+@media (prefers-reduced-motion:reduce) { .signal,.cursor-glow { display:none; animation:none; } }
+@media (max-width:700px) {
+  .trace-bank { width:145px; opacity:.82; }
+  .trace-bank:nth-of-type(3n + 2) { display:none; }
+}
 </style>
