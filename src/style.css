@@ -148,3 +148,24 @@ h1 em,h2 em { font-family:inherit; font-weight:inherit; font-style:normal; color
 .stack-section { background:#101b2d; border-block:1px solid var(--rule); }.stack-layout { display:grid; grid-template-columns:1fr 1.3fr; gap:28px; }.stack-section dl>div { grid-template-columns:minmax(110px,.55fr) 1fr; padding:13px 0; }.stack-section dt { color:#99baff; }
 .review-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }.review-grid figure { padding:22px; border:1px solid #34445e; display:grid; align-content:space-between; gap:20px; }.review-grid blockquote { margin:0; font-size:18px; }.review-grid figcaption { display:flex; align-items:center; gap:12px; }.review-grid small { display:block; color:var(--secondary); }.review-avatar { width:40px;height:40px;display:grid;place-items:center;border-radius:50%;background:#304d77;font:600 14px var(--mono); }.review-grid figure:nth-child(even) .review-avatar { background:#335753; }.review-stars { margin-left:auto; font-size:13px; color:#f2c36c; }
 @media(max-width:760px){.offer-grid,.stack-layout,.review-grid {grid-template-columns:minmax(0,1fr);}.offer-grid,.review-grid {gap:12px;}.offer-grid article,.review-grid figure {padding:18px;}}
+/* A personal introduction beside a short service index. */
+.opening { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:start; gap:clamp(34px,7vw,112px); padding-block:clamp(42px,6vw,85px); }
+.opening .wrap { width:100%; }
+.opening .hero { position:sticky; top:24px; background:none; border:0; overflow:visible; }
+.opening .hero::before,.opening .hero-portrait::before { display:none; }
+.opening .intro { display:flex; flex-direction:column; align-items:start; gap:0; }
+.opening .intro-copy { padding:0; }
+.opening .hero-portrait { order:-1; align-self:start; width:96px; height:100px; margin-bottom:22px; border-radius:16px; background:linear-gradient(145deg,#213a54,#132438); overflow:hidden; }
+.opening .hero-portrait img { width:100%; height:auto; object-fit:contain; align-self:flex-start; }
+.opening h1,.opening h2,.entry-title,.section-head h2 { font-family:'Inter','Segoe UI',sans-serif; text-transform:none; letter-spacing:-.045em; }
+.opening h1 { font-size:clamp(50px,5.1vw,78px); line-height:1.03; margin:16px 0; }.opening h1 em { color:#cfddf2; }
+.opening .byline { color:#99b2cf; }.opening .lede { color:#b2bfd0; max-width:43ch; }
+.opening .offer-section { padding:8px 0 0; }
+.opening h2 { font-size:clamp(29px,3vw,44px); }
+.opening .offer-grid { display:block; margin-top:18px; }
+.opening .offer-grid article { border:0; border-top:1px solid #29374b; background:transparent; padding:18px 0; }
+.opening .offer-grid h3 { font:650 20px/1.3 'Inter','Segoe UI',sans-serif; letter-spacing:-.025em; }
+.opening .offer-grid p { margin:5px 0; max-width:47ch; }
+.opening .proof-link { color:#9dc3ff; font-size:13px; }
+#projects { border-top:1px solid var(--rule); }
+@media(max-width:760px){.opening { display:block; padding-block:30px; }.opening .hero { position:static; }.opening .hero-portrait { width:85px; height:90px; }.opening .offer-section { margin-top:42px; }.opening .intro h1 { font-size:clamp(48px,11vw,75px); }.opening .actions { flex-wrap:wrap; }.opening .offer-grid article { padding:15px 0; }}

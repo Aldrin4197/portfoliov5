@@ -25,9 +25,9 @@ const limit = ref(pageSize)
 watch([search, filter], () => { limit.value = pageSize })
 const visible = computed(() => filtered.value.slice(0, limit.value))
 const offers = [
-  { title: 'Web & mobile apps', copy: 'Help customers find and book your services.', project: 'aadi' },
-  { title: 'Internal tools', copy: 'Track requests from intake to resolution.', project: 'ssu-helpdesk' },
-  { title: 'Esports overlays', copy: 'Keep drafts, scores, and MVPs clear on stream.', project: 'overlays' },
+  { title: 'Web & mobile apps', copy: 'Give your customers one place to find your services and book with you.', project: 'aadi' },
+  { title: 'Internal tools', copy: 'See which requests need your attention and who on your team owns each one.', project: 'ssu-helpdesk' },
+  { title: 'Esports overlays', copy: 'Give your viewers the draft, score, and standout plays at a glance.', project: 'overlays' },
 ].map(offer => ({ ...offer, example: catalog.find(p => p.id === offer.project)! }))
 const detail = ref<CatalogProject | null>(null)
 const dialog = ref<HTMLDialogElement | null>(null)
@@ -56,24 +56,26 @@ const tools = [{name:'Frontend',items:'Vue · React · JavaScript · HTML & CSS'
     </nav>
   </header>
   <main id="main">
+    <div class="opening wrap">
     <section class="hero" aria-labelledby="intro-title">
       <div class="intro wrap">
         <div class="intro-copy">
           <p class="byline"><i aria-hidden="true"></i> Full-stack developer / Catbalogan, PH</p>
           <h1 id="intro-title">Aldrin Jay<br><em>Delos Reyes.</em></h1>
-          <p class="lede">I build apps that simplify daily work and design broadcast graphics that help fans follow the match.</p>
-          <div class="actions"><a class="button" href="#contact">Discuss your project ↗</a><a class="inline-link" href="#projects">Explore my work ↓</a></div>
+          <p class="lede">If bookings or team requests are getting lost in messages, I can build you a simpler way to manage them.</p>
+          <div class="actions"><a class="button" href="#contact">Tell me about your project ↗</a><a class="inline-link" href="#projects">Explore my work ↓</a></div>
         </div>
         <figure class="hero-portrait"><img :src="portrait" alt="Graduation portrait of Aldrin Jay Delos Reyes" width="820" height="1063" fetchpriority="high"></figure>
       </div>
     </section>
     <section id="services" class="offer-section wrap">
-      <h2>What I offer<span class="dot">.</span></h2>
+      <h2>How I can help you<span class="dot">.</span></h2>
       <div class="offer-grid"><article v-for="offer in offers" :key="offer.title">
         <h3>{{ offer.title }}</h3><p>{{ offer.copy }}</p>
         <button class="proof-link" @click="inspect(offer.example)">{{ offer.example.title }} ↗</button>
       </article></div>
     </section>
+    </div>
     <section id="projects" class="work wrap">
       <div class="section-head"><h2>Project catalog<span class="dot">.</span></h2><label class="search-field">Search projects<input v-model="search" type="search" placeholder="Name, tool, or keyword"></label></div>
       <div class="catalog-controls"><div class="filters" aria-label="Project categories"><button v-for="category in ['All projects','Web apps','Mobile','Games','Hardware','Tabletop','Non-dev projects']" :key="category" :aria-pressed="category === filter" @click="filter = category">{{ category }}</button></div>
@@ -107,10 +109,10 @@ const tools = [{name:'Frontend',items:'Vue · React · JavaScript · HTML & CSS'
       </div>
     </section>
     <section id="about" class="about wrap">
-      <div><h2>How I work</h2><a class="inline-link" href="mailto:aldrinjay.delosreyes17@gmail.com?subject=CV%20request">Request my CV ↗</a></div>
-      <div class="about-copy"><p class="statement">I start with the person doing the work, then build the system around them.</p>
-        <p>At Samar State University, that has meant tools for managing employee records, tracking documents, and handling support requests. My electronics and firmware background helps me follow a problem across the interface, database, and device.</p>
-        <p>Interaction design matters just as much. In Aadi, a map helps people compare nearby rentals. In Stria, a daily check-in makes the next action clear.</p>
+      <div><h2>Working together</h2><a class="inline-link" href="mailto:aldrinjay.delosreyes17@gmail.com?subject=CV%20request">Request my CV ↗</a></div>
+      <div class="about-copy"><p class="statement">Show me how your team handles one task today. That’s where we’ll start.</p>
+        <p>Together, we’ll pick the part that costs you the most time and build a first version your team can try.</p>
+        <p>I’ve taken this approach at Samar State University, building tools for employee records, document tracking, and support requests.</p>
 
       </div>
       <details class="career"><summary>Experience, education & credentials <span>View details</span></summary><div class="history"><ExperienceSection/><EducationSection/><CertificationsSection/><HackathonsSection/></div></details>
@@ -122,7 +124,7 @@ const tools = [{name:'Frontend',items:'Vue · React · JavaScript · HTML & CSS'
         <blockquote>“{{ r.text }}”</blockquote><figcaption><span class="review-avatar" aria-hidden="true">{{ r.name.split(' ').map(n => n[0]).join('') }}</span><span><strong>{{ r.name }}</strong><small>{{ r.date }}</small></span><span class="review-stars" :aria-label="r.rating + ' out of 5 stars'">{{ '★'.repeat(r.rating) }}</span></figcaption>
       </figure></div>
     </section>
-    <section id="contact" class="contact"><div class="wrap"><h2>What are you<br><em>working on?</em></h2><div><p>Tell me who it’s for, what you want to make easier, and when you need it. We can work out what the first version should do.</p><a class="button" href="mailto:aldrinjay.delosreyes17@gmail.com">Email Aldrin ↗</a></div></div></section>
+    <section id="contact" class="contact"><div class="wrap"><h2>What are you<br><em>working on?</em></h2><div><p>Tell me what you’re trying to make easier. A few lines about your team and your timeline are plenty.</p><a class="button" href="mailto:aldrinjay.delosreyes17@gmail.com">Email me ↗</a></div></div></section>
   </main>
   <footer class="wrap"><a class="wordmark" href="#home">drindlr.</a><div><a href="https://github.com/Aldrin4197">GitHub ↗</a><a href="https://www.linkedin.com/in/aldrin-jay-delos-reyes-559817267/">LinkedIn ↗</a><a href="https://www.facebook.com/drindlr">Facebook ↗</a></div></footer>
   <dialog ref="dialog" aria-labelledby="detail-title" @close="afterClose" @click="event => { if(event.target === dialog) closeDialog() }">
