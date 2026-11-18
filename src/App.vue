@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, onBeforeUnmount } from 'vue'
-import avatar from './assets/ghib.png'
+import { projects } from './featured'
 import { archive } from './projects'
 import ExperienceSection from './sections/ExperienceSection/ExperienceSection.vue'
 import EducationSection from './sections/EducationSection/EducationSection.vue'
@@ -8,7 +8,8 @@ import CertificationsSection from './sections/CertificationsSection/Certificatio
 import HackathonsSection from './sections/HackathonsSection/HackathonsSection.vue'
 
 const base = import.meta.env.BASE_URL
-import { projects } from './featured'
+const showcase = ['game', 'esports', 'aadi'].map(id => projects.find(p => p.id === id)!)
+const preview = ref(showcase[0]!)
 type Project = typeof projects[number]
 const filter = ref('All projects')
 const filtered = computed(() => filter.value === 'All projects' ? projects : projects.filter(p => p.category === filter.value))
@@ -32,27 +33,32 @@ const tools = [{name:'Frontend',items:'Vue · React · JavaScript · HTML & CSS'
 <template>
   <a class="skip" href="#main">Skip to content</a>
   <header class="masthead wrap" id="home">
-    <a href="#home" class="wordmark" aria-label="Drindlr home"><span class="monogram" aria-hidden="true">d</span>drindlr.</a>
+    <a href="#home" class="wordmark" aria-label="Drindlr home"><span class="monogram" aria-hidden="true">&gt;_</span>drindlr.</a>
     <button class="menu-button" aria-controls="menu" :aria-expanded="menuOpen" @click="menuOpen = !menuOpen">{{ menuOpen ? 'Close' : 'Menu' }}</button>
     <nav id="menu" :class="{ open: menuOpen }" aria-label="Primary navigation" @click="menuOpen = false">
       <a href="#projects">Work</a><a href="#about">About</a><a href="#katha">KATHA</a><a class="nav-contact" href="#contact">Get in touch ↗</a>
     </nav>
   </header>
   <main id="main">
-    <section class="intro wrap" aria-labelledby="intro-title">
-      <div class="intro-copy">
-        <p class="byline">Aldrin Jay Delos Reyes <span>/</span> Independent developer</p>
-        <h1 id="intro-title">I build tools for work <em>and play.</em></h1>
-        <p class="lede">I help teams turn complicated workflows into software people can use. My background in electronics and game design shapes how I build, from the system underneath to the screen in someone’s hand.</p>
-        <div class="actions"><a class="button" href="#projects">Explore my work ↓</a><a class="inline-link" href="#about">Meet Aldrin</a></div>
+    <section class="hero" aria-labelledby="intro-title">
+      <div class="intro wrap">
+        <div class="intro-copy">
+          <p class="byline"><i aria-hidden="true"></i> Full-stack developer / Catbalogan, PH</p>
+          <h1 id="intro-title">Aldrin Jay<br><em>Delos Reyes.</em></h1>
+          <p class="lede">I turn complex workflows into software people can use. I build web apps for teams and local communities, and games that bring people together.</p>
+          <div class="actions"><a class="button" href="#projects">Explore my work <span>↓</span></a><a class="inline-link" href="https://github.com/Aldrin4197">GitHub ↗</a></div>
+        </div>
+        <div class="showcase">
+          <div class="viewer"><div class="viewer-bar"><span><b aria-hidden="true">&gt;_</b> PROJECT PREVIEW</span><span aria-hidden="true">● ● ●</span></div>
+          <button class="frame" @click="inspect(preview)" :aria-label="'Inspect '+preview.title"><img :src="base+'projects/'+preview.image+'.webp'" :alt="preview.title+' interface'" fetchpriority="high"></button>
+          <div class="readout"><span>{{ preview.title }}</span><button @click="inspect(preview)">Inspect ↗</button></div></div>
+          <div class="switcher" aria-label="Featured project previews"><button v-for="p in showcase" :key="p.id" :aria-pressed="preview.id === p.id" @click="preview = p">{{ p.short }}</button></div>
+        </div>
       </div>
-      <figure class="portrait">
-        <img :src="avatar" alt="Illustrated portrait of Aldrin holding his manga collection" fetchpriority="high" width="1024" height="1024"/>
-        <figcaption>Catbalogan City <span>Samar, Philippines</span></figcaption>
-      </figure>
     </section>
+    <div class="stack-strip"><div class="wrap"><span>Core stack</span><b>Laravel</b><b>Vue.js</b><b>Flutter</b><b>MySQL</b></div></div>
     <section id="projects" class="work wrap">
-      <div class="section-head"><h2>Selected work</h2><div class="filters" aria-label="Project categories"><button v-for="category in ['All projects','Web apps','Mobile','Games','Tabletop']" :key="category" :aria-pressed="category === filter" @click="filter = category">{{ category }}</button></div></div>
+      <div class="section-head"><h2>Selected builds<span class="dot">.</span></h2><div class="filters" aria-label="Project categories"><button v-for="category in ['All projects','Web apps','Mobile','Games','Tabletop']" :key="category" :aria-pressed="category === filter" @click="filter = category">{{ category }}</button></div></div>
       <div class="gallery">
         <article v-for="project in filtered" :key="project.id" class="entry">
           <button class="project-button" @click="inspect(project)" :aria-label="'View '+project.title">
