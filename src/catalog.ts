@@ -6,6 +6,7 @@ export interface CatalogProject {
   title: string
   category: string
   description: string
+  artwork?: string
   image: string
   tags: string[]
   status: string
@@ -15,6 +16,7 @@ export interface CatalogProject {
 
 // Last documented work or project snapshot. Dates are not release dates.
 const recentActivity: Record<string, string> = {
+  'ipovcon-2026': '2026-10', 'issp-planning': '2026-11',
   perchwise: '2026-10-15', overlays: '2026-11-17', katha: '2026-11', aadi: '2026-11', color: '2026-11', esports: '2026-11',
   game: '2026-11', stria: '2026-11', amari: '2026-03-24',
 }
@@ -29,9 +31,14 @@ const earlierActivity: Record<string, string> = {
   'iPOVCON 2025': '2025',
 }
 
+const artwork = import.meta.glob<string>('./assets/showcase/*.webp', {
+  eager: true, query: '?url', import: 'default',
+})
+
 export const catalog: CatalogProject[] = [
   ...projects.map(p => ({
     ...p, activity: recentActivity[p.id] ?? '',
+    artwork: artwork[`./assets/showcase/${p.id}.webp`],
     image: p.image ? import.meta.env.BASE_URL + 'projects/' + p.image + '.webp' : '',
   })),
   ...archive.map(p => ({

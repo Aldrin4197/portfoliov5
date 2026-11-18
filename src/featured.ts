@@ -1,4 +1,24 @@
 export const projects = [
+ {
+   id: 'ipovcon-2026',
+   title: 'iPOVCON 2026',
+   category: 'Web apps',
+   description: 'One place for conference attendees to find speakers, submit research, and register for the seventh International Conference on Poverty Alleviation and Sustainable Development.',
+   image: '',
+   tags: ['Conference website', 'Research submissions', 'Registration'],
+   status: 'Conference website',
+   url: 'https://ipovcon.ssu.edu.ph/',
+ },
+ {
+   id: 'issp-planning',
+   title: 'ISSP ICT Planning and Tracking System',
+   category: 'Web apps',
+   description: 'Helps SSU offices see what ICT equipment they requested, what arrived, and what still needs funding. Staff can track deliveries against the resource plan and export it to Excel.',
+   image: '',
+   tags: ['ICT resource planning', 'Delivery tracking', 'Laravel', 'Excel export'],
+   status: 'Internal system',
+ },
+
  { id:'aadi', title:'Aadi Rental Marketplace', short:'Aadi', category:'Web apps', label:'Spaces. Vehicles. Local skills.', description:'A marketplace bringing space rentals, utility vehicles, and local service providers together. Explore listings on a map and find what you need, closer to home.', image:'aadi', color:'#1b9187', tags:['Marketplace','Map discovery','Web + mobile'], status:'Featured project' },
  { id:'stria', title:'Stria', short:'Stria', category:'Mobile', label:'Small habits. A little progress, every day.', description:'A habit-tracking app with daily check-ins, progress, and rewards. A calm interface that makes room for the small things that add up.', image:'stria', color:'#7161ad', tags:['Habit tracking','Daily check-ins','Mobile app'], status:'Featured project' },
  { id:'game', title:'Game Portfolio', short:'Game Portfolio', category:'Games', label:'A portfolio you can explore.', description:'An interactive pixel-art world built around my work. Move through the environment, discover locations, and explore the developer’s cabin.', image:'game', color:'#477c70', tags:['Pixel art','Interactive portfolio','Browser experience'], status:'Featured project' },

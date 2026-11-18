@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ProjectMedia from './components/ProjectMedia.vue'
 import ArrowUpRight from './components/ArrowUpRight.vue'
 import SocialLinks from './components/SocialLinks.vue'
 import ReviewAvatar from './components/ReviewAvatar.vue'
@@ -11,7 +12,6 @@ import EducationSection from './sections/EducationSection/EducationSection.vue'
 import CertificationsSection from './sections/CertificationsSection/CertificationsSection.vue'
 import HackathonsSection from './sections/HackathonsSection/HackathonsSection.vue'
 
-import portrait from './assets/me.png'
 const katha = catalog.find(p => p.id === 'katha')!
 const creativeCategories = ['Tabletop', 'Broadcast design']
 const filter = ref('All projects')
@@ -86,7 +86,7 @@ const tools = [{name:'Frontend',items:'Vue · React · JavaScript · HTML & CSS'
     <div><h1>Aldrin Jay <br>Delos Reyes</h1><p class="role">Full-stack developer</p>
     <p class="lede">I build apps for your business, tools for your team, and graphics for your next broadcast.</p></div>
     <nav aria-label="Section navigation"><a v-for="section in sections" :key="section.id" :href="'#'+section.id" :aria-current="active === section.id ? 'location' : undefined">{{ section.label }}</a></nav>
-    <div class="signature"><figure class="hero-portrait"><img :src="portrait" alt="Graduation portrait of Aldrin Jay Delos Reyes" width="820" height="1063" fetchpriority="high"></figure><div><small>Catbalogan, Philippines</small><SocialLinks /></div></div>
+    <div class="signature"><div><small>Catbalogan, Philippines</small><SocialLinks /></div></div>
   </header><main id="main">    <section id="about" class="about wrap">
       <div><h2>About</h2><a class="inline-link" href="mailto:aldrinjay.delosreyes17@gmail.com?subject=CV%20request">Request my CV <ArrowUpRight /></a></div>
       <div class="about-copy"><p class="statement">Show me how your team works. I’ll help you build a simpler way to handle the parts that slow you down.</p>
@@ -111,12 +111,11 @@ const tools = [{name:'Frontend',items:'Vue · React · JavaScript · HTML & CSS'
       <div class="gallery hover-list" id="project-results">
         <article v-for="project in visible" :key="project.id" class="entry hover-row">
           <button class="project-button" @click="inspect(project)" :aria-label="'View '+project.title">
-            <span class="cover" :class="project.id">
-              <img v-if="project.image" :src="project.image" alt="" loading="lazy"/>
+            <span class="cover" :class="[project.id, { 'has-artwork': project.artwork }]">
+              <img v-if="project.artwork || project.image" :src="project.artwork || project.image" alt="" loading="lazy">
               <span v-else-if="project.id === 'katha'" class="foil">KATHA</span>
               <span v-else-if="project.id === 'overlays'" class="broadcast-cover" aria-hidden="true"><i>● ON AIR</i><b>Matchday</b><span>Broadcast overlays</span></span>
-              <span v-else-if="project.id === 'perchwise'" class="cover-name">PerchWise</span>
-              <span v-else class="photobooth">Amari’s <i>Photobooth</i></span>
+              <span v-else class="cover-name">{{ project.title }}</span>
             </span>
             <span class="entry-body">
               <span class="entry-title">{{ project.title }}<span aria-hidden="true"><ArrowUpRight /></span></span>
@@ -154,7 +153,7 @@ const tools = [{name:'Frontend',items:'Vue · React · JavaScript · HTML & CSS'
   </div>
   <dialog ref="dialog" aria-labelledby="detail-title" @close="afterClose" @click="event => { if(event.target === dialog) closeDialog() }">
     <div v-if="detail" class="dialog-content"><button class="close" autofocus @click="closeDialog" aria-label="Close project">Close ×</button>
-      <img v-if="detail.image" class="detail-image" :src="detail.image" :alt="detail.title+' interface'"/>
+      <ProjectMedia :key="detail.id" :project="detail" />
       <div class="dialog-copy"><small>{{ detail.category }} · {{ detail.status }}</small><h2 id="detail-title">{{ detail.title }}</h2><p>{{ detail.description }}</p><small>{{ detail.tags.join(' · ') }}</small>
         <a v-if="detail.url" class="button" :href="detail.url" target="_blank" rel="noopener noreferrer">Visit project <ArrowUpRight /></a><a v-else class="button" :href="'mailto:aldrinjay.delosreyes17@gmail.com?subject='+encodeURIComponent(detail.title)">Ask about this project <ArrowUpRight /></a>
       </div>
