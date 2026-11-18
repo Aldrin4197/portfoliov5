@@ -8,103 +8,92 @@ import CertificationsSection from './sections/CertificationsSection/Certificatio
 import HackathonsSection from './sections/HackathonsSection/HackathonsSection.vue'
 
 const base = import.meta.env.BASE_URL
-const projects = [
- { id:'aadi', title:'Aadi Rental Marketplace', short:'Aadi', category:'Web apps', label:'Spaces. Vehicles. Local skills.', description:'A marketplace bringing space rentals, utility vehicles, and local service providers together. Explore listings on a map and find what you need, closer to home.', image:'aadi', color:'#1b9187', tags:['Marketplace','Map discovery','Web + mobile'], status:'Featured project' },
- { id:'stria', title:'Stria', short:'Stria', category:'Mobile', label:'Small habits. A little progress, every day.', description:'A habit-tracking app with daily check-ins, progress, and rewards. A calm interface that makes room for the small things that add up.', image:'stria', color:'#7161ad', tags:['Habit tracking','Daily check-ins','Mobile app'], status:'Featured project' },
- { id:'game', title:'Game Portfolio', short:'Game Portfolio', category:'Games', label:'A portfolio you can explore.', description:'An interactive pixel-art world built around my work. Move through the environment, discover locations, and explore the developer’s cabin.', image:'game', color:'#477c70', tags:['Pixel art','Interactive portfolio','Browser experience'], status:'Featured project' },
- { id:'esports', title:'Catbalogan City Esports', short:'City Esports', category:'Web apps', label:'Local roots. Next-level play.', description:'A website for Catbalogan City Esports, bringing its events, broadcasting services, and local gaming community into one home.', image:'esports', color:'#3973dc', tags:['Community','Esports','Website'], status:'Featured project' },
- { id:'color', title:'Color Game + Message Room', short:'Color Game', category:'Games', label:'A little play. A shared room.', description:'A browser-based color game with a message room. An experiment in bringing a familiar Filipino game and conversation into a shared digital space.', image:'color', color:'#a965b2', tags:['Browser game','Message room','Beta'], status:'Beta' },
- { id:'amari', title:'Amari’s Photobooth', short:'Amari’s', category:'Web apps', label:'A moment worth keeping.', description:'Amari’s Photobooth — another project in my growing collection of web experiences. Visit the live site to explore it.', image:'', color:'#c97c91', tags:['Photobooth','Web experience'], status:'Live site', url:'https://amarisphotobooth.drindlr.com' },
- { id:'katha', title:'KATHA', short:'KATHA', category:'Tabletop', label:'Philippine folklore. Your next adventure.', description:'A tabletop card-and-board game inspired by Philippine folklore. Creatures, alamat, agimat, and pangyayari come together in a world of stories, strategy, and discovery. Currently in development, with a digital playtest prototype.', image:'', color:'#b18a42', tags:['Philippine folklore','Tabletop','In development'], status:'In development' },
-]
+import { projects } from './featured'
 type Project = typeof projects[number]
-const selected = ref<Project>(projects[0]!)
 const filter = ref('All projects')
 const filtered = computed(() => filter.value === 'All projects' ? projects : projects.filter(p => p.category === filter.value))
 const detail = ref<Project | null>(null)
 const dialog = ref<HTMLDialogElement | null>(null)
 const menuOpen = ref(false)
-const archiveOpen = ref(false)
-function showArchive() { archiveOpen.value = true }
-const viewed = ref(new Set<string>())
+
 let opener: HTMLElement | null = null
 function inspect(project: Project) {
  opener = document.activeElement as HTMLElement
  detail.value = project
- viewed.value = new Set([...viewed.value, project.id])
  dialog.value?.showModal()
  document.body.style.overflow = 'hidden'
 }
 function closeDialog() { dialog.value?.close() }
 function afterClose() { document.body.style.overflow = ''; opener?.focus() }
 onBeforeUnmount(() => { document.body.style.overflow = '' })
-function selectProject(project: Project) { selected.value = project }
-function browseKey(event: KeyboardEvent) {
- const offset = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0
- if (!offset) return
- event.preventDefault()
- const i = filtered.value.findIndex(p => p.id === selected.value.id)
- const next = filtered.value[(i + offset + filtered.value.length) % filtered.value.length]
- if (next) { selected.value = next; document.getElementById(`select-${next.id}`)?.focus() }
-}
-function setFilter(value: string) { filter.value = value; const first = filtered.value[0]; if (first) selected.value = first }
 const tools = [{name:'Frontend',items:'Vue · React · JavaScript · HTML & CSS'}, {name:'Backend',items:'Laravel · PHP · Node.js · REST APIs'}, {name:'Data',items:'MySQL · PostgreSQL · MongoDB'}, {name:'Hardware',items:'Arduino · Raspberry Pi · Embedded systems'}]
 </script>
 
 <template>
- <a class="skip" href="#main">Skip to content</a>
- <header class="topbar">
-  <a class="brand" href="#home" aria-label="Aldrin home"><span class="brand-mark">a<span>+</span></span><strong>drindlr<span class="brand-dot">.</span></strong></a>
-  <button class="menu-toggle" @click="menuOpen = !menuOpen" :aria-expanded="menuOpen" aria-controls="navigation">{{ menuOpen ? 'Close menu' : 'Menu +' }}</button>
-  <nav id="navigation" :class="{open:menuOpen}" aria-label="Main navigation" @click="menuOpen=false"><a href="#projects">Project select</a><a href="#about">Player profile</a><a href="#katha">Side quest</a><a class="nav-contact" href="#contact">Let’s talk <span><svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></span></a></nav>
- </header>
- <main id="main">
-  <section id="home" class="hero wrap">
-   <div class="hero-copy">
-    <div class="player-label"><span class="pixel-dot"></span> Aldrin Jay Delos Reyes <span class="tag-small">Player one</span></div>
-    <h1>Complex needs.<br>Useful tools.<br><span>Built for people.</span></h1>
-    <p>I help teams turn complicated workflows and early ideas into practical digital products. I combine full-stack development, an Electronics Engineering background, and thoughtful interaction design to build around the people doing the work.</p>
-    <div class="hero-actions"><a class="button primary" href="#projects"><span>▶</span> Explore my projects</a><a class="text-link" href="mailto:aldrinjay.delosreyes17@gmail.com?subject=CV%20request">Request CV <span><svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></span></a></div>
-    <div class="location"><span>⌖</span> Made with curiosity in Catbalogan, Philippines</div>
-   </div>
-   <div class="hero-console">
-    <div class="console-top"><span><i></i> Aldrin’s world</span><span>Creative mode</span></div>
-    <div class="world-scene"><img :src="base+'projects/game.webp'" alt="My pixel-art Game Portfolio: a developer’s cabin in a forest at night" fetchpriority="high"/><div class="world-caption"><span class="world-icon">✦</span><div><small>My approach</small><strong>Engineering depth. A maker’s imagination.</strong></div></div></div>
-    <div class="console-bottom"><div class="dpad" aria-hidden="true">✚</div><span>Developer. Tinkerer.<br>World builder.</span><button class="round-button" @click="inspect(projects[2]!)" aria-label="View Game Portfolio"><svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></button><span class="console-buttons" aria-hidden="true">● ●</span></div>
-    <span class="console-sticker">Keep making<br>cool stuff ✳</span>
-   </div>
-  </section>
-  <div class="chapter-strip"><div class="wrap"><span>Web applications</span><b>✦</b><span>Interactive experiences</span><b>✦</b><span>Embedded systems</span><b>✦</b><span>Tabletop adventures</span></div></div>
-  <section id="value" class="value-section wrap" aria-labelledby="value-heading">
-   <div class="section-intro"><div><p class="section-note">What I bring to your team</p><h2 id="value-heading">A useful idea needs<br>more than code.</h2></div><p>I connect the workflow, the interface, and the system behind it<br>so the product makes sense as a whole.</p></div>
-   <div class="value-points">
-    <article><span class="value-symbol" aria-hidden="true">↳</span><h3>Make everyday work easier.</h3><p>I translate operational needs into tools for managing records, tracking requests, and finding information—drawing on my work with university HR, asset management, and support systems.</p><a href="#projects" @click="showArchive">Explore the university systems <span aria-hidden="true">→</span></a></article>
-    <article><span class="value-symbol" aria-hidden="true">⌘</span><h3>Connect the whole system.</h3><p>With experience across interfaces, APIs, databases, and embedded systems, I can work through how the pieces fit together—from a user’s action to the data or device behind it.</p><a href="#about">See my technical background <span aria-hidden="true">→</span></a></article>
-    <article><span class="value-symbol" aria-hidden="true">✦</span><h3>Give people a reason to engage.</h3><p>I bring a game maker’s attention to feedback, discovery, and interaction. From Stria’s daily check-ins to Aadi’s map-based browsing, I design around what people are trying to do next.</p><a href="#projects" @click="setFilter('All projects'); selectProject(projects[1]!)">Take a closer look at Stria <span aria-hidden="true">→</span></a></article>
-   </div>
-  </section>
-  <section id="projects" class="projects-section wrap">
-   <div class="section-intro"><div><p class="section-note">The project collection</p><h2>Choose your adventure<span>.</span></h2></div><p>Practical systems, useful products, and playful experiences.<br>See how that approach takes shape in my work.</p></div>
-   <div class="filters" aria-label="Filter projects"><button v-for="f in ['All projects','Web apps','Mobile','Games','Tabletop']" :key="f" :aria-pressed="filter===f" :class="{active:filter===f}" @click="setFilter(f)">{{ f }}<span v-if="f==='All projects'">{{ projects.length }}</span></button></div>
-   <div class="project-console" :style="{'--project-color':selected.color}">
-    <div class="featured-visual" :class="selected.id">
-     <img v-if="selected.image" :src="base+'projects/'+selected.image+'.webp'" :alt="selected.title+' interface screenshot'" :key="selected.id" loading="lazy"/>
-     <div v-else-if="selected.id==='amari'" class="amari-art" aria-label="Amari’s Photobooth typographic project cover"><span>Smile. Save. Remember.</span><div class="photo-strip"><i>✿</i><i>☺</i><i>♡</i></div><strong>Amari’s<br><em>Photobooth</em></strong></div>
-     <div v-else class="katha-cover"><span>Stories become adventures</span><b>✺</b><strong>KATHA</strong><span>A Philippine folklore tabletop game</span></div>
-     <span class="visual-label">{{ selected.image ? 'Project preview' : 'Project cover' }}</span>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="masthead wrap" id="home">
+    <a href="#home" class="wordmark" aria-label="Drindlr home"><span class="monogram" aria-hidden="true">d</span>drindlr.</a>
+    <button class="menu-button" aria-controls="menu" :aria-expanded="menuOpen" @click="menuOpen = !menuOpen">{{ menuOpen ? 'Close' : 'Menu' }}</button>
+    <nav id="menu" :class="{ open: menuOpen }" aria-label="Primary navigation" @click="menuOpen = false">
+      <a href="#projects">Work</a><a href="#about">About</a><a href="#katha">KATHA</a><a class="nav-contact" href="#contact">Get in touch ↗</a>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="intro wrap" aria-labelledby="intro-title">
+      <div class="intro-copy">
+        <p class="byline">Aldrin Jay Delos Reyes <span>/</span> Independent developer</p>
+        <h1 id="intro-title">I build tools for work <em>and play.</em></h1>
+        <p class="lede">I help teams turn complicated workflows into software people can use. My background in electronics and game design shapes how I build, from the system underneath to the screen in someone’s hand.</p>
+        <div class="actions"><a class="button" href="#projects">Explore my work ↓</a><a class="inline-link" href="#about">Meet Aldrin</a></div>
+      </div>
+      <figure class="portrait">
+        <img :src="avatar" alt="Illustrated portrait of Aldrin holding his manga collection" fetchpriority="high" width="1024" height="1024"/>
+        <figcaption>Catbalogan City <span>Samar, Philippines</span></figcaption>
+      </figure>
+    </section>
+    <section id="projects" class="work wrap">
+      <div class="section-head"><h2>Selected work</h2><div class="filters" aria-label="Project categories"><button v-for="category in ['All projects','Web apps','Mobile','Games','Tabletop']" :key="category" :aria-pressed="category === filter" @click="filter = category">{{ category }}</button></div></div>
+      <div class="gallery">
+        <article v-for="project in filtered" :key="project.id" class="entry">
+          <button class="project-button" @click="inspect(project)" :aria-label="'View '+project.title">
+            <span class="cover" :class="project.id">
+              <img v-if="project.image" :src="base+'projects/'+project.image+'.webp'" alt="" loading="lazy"/>
+              <span v-else-if="project.id === 'katha'" class="foil">KATHA</span>
+              <span v-else class="photobooth">Amari’s <i>Photobooth</i></span>
+            </span>
+            <span class="entry-title">{{ project.title }}<span aria-hidden="true">↗</span></span>
+          </button>
+          <p>{{ project.category }}<span v-if="['color','katha'].includes(project.id)"> · {{ project.status }}</span></p>
+        </article>
+      </div>
+      <details class="archive"><summary>Earlier projects <span>{{ archive.length }} projects</span></summary>
+        <div class="archive-grid"><article v-for="p in archive" :key="p.title"><img :src="p.img" :alt="p.title" loading="lazy"/><div><h3>{{ p.title }}</h3><p>{{ p.desc }}</p><small>{{ p.tags.join(' · ') }}</small></div></article></div>
+      </details>
+    </section>
+    <section id="katha" class="feature">
+      <div class="wrap feature-inner">
+        <div><p class="byline">Tabletop game in development</p><h2>KATHA</h2><p class="feature-copy">I’m turning Philippine folklore into a game you can gather around. Players encounter creatures, legends, and events across a shared board. A digital prototype lets me playtest each change.</p><button class="feature-link" @click="inspect(projects[6]!)">Explore the game ↗</button></div>
+        <div class="deck" aria-hidden="true"><div class="playing-card"></div><div class="playing-card"></div><div class="playing-card"><span>KATHA</span><b>✷</b><span>Philippine folklore</span></div></div>
+      </div>
+    </section>
+    <section id="about" class="about wrap">
+      <div><h2>How I work</h2><a class="inline-link" href="mailto:aldrinjay.delosreyes17@gmail.com?subject=CV%20request">Request my CV ↗</a></div>
+      <div class="about-copy"><p class="statement">I start with the person doing the work, then build the system around them.</p>
+        <p>At Samar State University, that has meant tools for managing employee records, tracking documents, and handling support requests. My electronics and firmware background helps me follow a problem across the interface, database, and device.</p>
+        <p>Interaction design matters just as much. In Aadi, a map helps people compare nearby rentals. In Stria, a daily check-in makes the next action clear.</p>
+        <dl><div v-for="item in tools" :key="item.name"><dt>{{ item.name }}</dt><dd>{{ item.items }}</dd></div></dl>
+      </div>
+      <details class="career"><summary>Experience, education & credentials <span>View details</span></summary><div class="history"><ExperienceSection/><EducationSection/><CertificationsSection/><HackathonsSection/></div></details>
+    </section>
+    <section id="contact" class="contact"><div class="wrap"><h2>What are you<br><em>working on?</em></h2><div><p>Tell me about the workflow you want to improve or the product you’re trying to build.</p><a class="button" href="mailto:aldrinjay.delosreyes17@gmail.com">Email Aldrin ↗</a></div></div></section>
+  </main>
+  <footer class="wrap"><a class="wordmark" href="#home">drindlr.</a><div><a href="https://github.com/Aldrin4197">GitHub ↗</a><a href="https://www.linkedin.com/in/aldrin-jay-delos-reyes-559817267/">LinkedIn ↗</a><a href="https://www.facebook.com/drindlr">Facebook ↗</a></div></footer>
+  <dialog ref="dialog" aria-labelledby="detail-title" @close="afterClose" @click="event => { if(event.target === dialog) closeDialog() }">
+    <div v-if="detail" class="dialog-content"><button class="close" autofocus @click="closeDialog" aria-label="Close project">Close ×</button>
+      <img v-if="detail.image" class="detail-image" :src="base+'projects/'+detail.image+'.webp'" :alt="detail.title+' interface'"/>
+      <div class="dialog-copy"><small>{{ detail.category }} · {{ detail.status }}</small><h2 id="detail-title">{{ detail.title }}</h2><p>{{ detail.description }}</p><small>{{ detail.tags.join(' · ') }}</small>
+        <a v-if="detail.url" class="button" :href="detail.url" target="_blank" rel="noopener noreferrer">Visit project ↗</a><a v-else class="button" :href="'mailto:aldrinjay.delosreyes17@gmail.com?subject='+encodeURIComponent(detail.title)">Ask about this project ↗</a>
+      </div>
     </div>
-    <div class="project-info" aria-live="polite"><div class="project-status"><i></i>{{ selected.status }}</div><p class="project-type">{{ selected.category }}</p><h3>{{ selected.title }}</h3><p>{{ selected.description }}</p><div class="tags"><span v-for="tag in selected.tags" :key="tag">{{ tag }}</span></div><button class="button dark" @click="inspect(selected)">Explore project <span><svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></span></button></div>
-   </div>
-   <div class="project-roster" aria-label="Select project" @keydown="browseKey"><button v-for="p in filtered" :key="p.id" :id="'select-'+p.id" :aria-pressed="selected.id===p.id" :class="{selected:selected.id===p.id}" @click="selectProject(p)"><img v-if="p.image" :src="base+'projects/'+p.image+'.webp'" alt="" loading="lazy"/><span v-else class="tile-symbol" :style="{background:p.color}">{{ p.id==='katha' ? '✺' : '☺' }}</span><span>{{ p.short }}</span><span v-if="viewed.has(p.id)" class="viewed" aria-label="Viewed">✓</span></button></div>
-   <div class="collection-footer"><span>← → Browse with your keyboard</span><span>{{ viewed.size }} / {{ projects.length }} projects explored</span></div>
-   <details class="archive" :open="archiveOpen" @toggle="archiveOpen = ($event.target as HTMLDetailsElement).open"><summary>Earlier builds <span>10 projects <b>＋</b></span></summary><div class="archive-grid"><article v-for="p in archive" :key="p.title"><img :src="p.img" :alt="p.title" loading="lazy"/><div><small>{{ p.status }}</small><h3>{{ p.title }}</h3><p>{{ p.desc }}</p><div class="tags"><span v-for="t in p.tags" :key="t">{{ t }}</span></div></div></article></div></details>
-  </section>
-  <section id="katha" class="katha-section"><div class="wrap katha-layout"><div class="katha-copy"><span class="side-quest">✦ Side quest in progress</span><h2>Some worlds deserve<br>a place at the table.</h2><p>Meet KATHA, my tabletop card-and-board game inspired by Philippine folklore. A growing world of creatures, legends, and unexpected turns — made to be explored together.</p><button class="button parchment" @click="inspect(projects[6]!)">Discover KATHA <span><svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></span></button><small>In development · Tabletop + digital playtest</small></div><div class="katha-deck" aria-label="Decorative KATHA card backs"><div class="katha-card card-left"><span>Alamat</span><b>☼</b><strong>KATHA</strong><small>Stories that stay with us</small></div><div class="katha-card card-right"><span>Pangyayari</span><b>✷</b><strong>KATHA</strong><small>Every turn, a new story</small></div><div class="katha-card card-center"><span>Philippine folklore</span><b>✺</b><strong>KATHA</strong><small>An adventure in the making</small></div></div></div></section>
-  <section id="about" class="about-section wrap"><div class="section-intro"><div><p class="section-note">Behind the builds</p><h2>Meet the player<span>.</span></h2></div><a class="text-link" href="mailto:aldrinjay.delosreyes17@gmail.com?subject=CV%20request">Request my CV <svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a></div><div class="profile-layout"><div class="profile-card"><img :src="avatar" alt="Illustrated portrait of Aldrin with his manga collection" loading="lazy"/><div><span class="tag-small">Player one</span><h3>Aldrin Jay<br>Delos Reyes</h3><p>Developer & curious human</p></div></div><div class="profile-copy"><h3>Engineering depth.<br>Creative problem-solving.</h3><p>I’m a self-taught developer with a background in Electronics Engineering. Since shifting my focus to software at the end of 2022, I’ve worked across web applications, embedded systems, and ideas that sit somewhere in between.</p><p>I enjoy prototyping, solving practical problems, and making room for play. Sometimes that means a university system. Sometimes it means a game about Philippine folklore.</p><div class="loadout"><h4>My everyday loadout</h4><div v-for="tool in tools" :key="tool.name"><span>{{ tool.name }}</span><p>{{ tool.items }}</p></div></div></div></div>
-   <details class="career"><summary>Experience & achievements <span>Open player history ＋</span></summary><div class="legacy-sections"><ExperienceSection/><EducationSection/><CertificationsSection/><HackathonsSection/></div></details>
-  </section>
-  <section id="contact" class="contact-section"><div class="wrap"><span class="contact-spark" aria-hidden="true">✳</span><p>Have a workflow to improve or a product to bring to life?</p><h2>Ready for the<br>next adventure?</h2><a class="button primary" href="mailto:aldrinjay.delosreyes17@gmail.com">Let’s discuss your project <span><svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></span></a><a class="email-link" href="mailto:aldrinjay.delosreyes17@gmail.com">aldrinjay.delosreyes17@gmail.com</a></div></section>
- </main>
- <footer class="wrap footer"><a class="brand" href="#home"><strong>drindlr.</strong></a><span>Built with curiosity. And a little play.</span><div><a href="https://github.com/Aldrin4197" target="_blank" rel="noopener noreferrer">GitHub <svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a><a href="https://www.linkedin.com/in/aldrin-jay-delos-reyes-559817267/" target="_blank" rel="noopener noreferrer">LinkedIn <svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a><a href="https://www.facebook.com/drindlr" target="_blank" rel="noopener noreferrer">Facebook <svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a></div></footer>
- <dialog ref="dialog" class="project-dialog" aria-labelledby="project-dialog-title" @close="afterClose" @click="(e) => { if(e.target===dialog) closeDialog() }"><div v-if="detail" class="dialog-inner"><button class="dialog-close" autofocus @click="closeDialog" aria-label="Close project">✕</button><img v-if="detail.image" class="dialog-image" :class="detail.id" :src="base+'projects/'+detail.image+'.webp'" :alt="detail.title+' screenshot'"/><div class="dialog-copy"><p class="section-note">{{ detail.category }} / {{ detail.status }}</p><h2 id="project-dialog-title">{{ detail.title }}</h2><h3>{{ detail.label }}</h3><p>{{ detail.description }}</p><div class="tags"><span v-for="t in detail.tags" :key="t">{{ t }}</span></div><a v-if="detail.url" class="button primary" :href="detail.url" target="_blank" rel="noopener noreferrer">Visit live site <svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a><a v-else class="button primary" :href="'mailto:aldrinjay.delosreyes17@gmail.com?subject='+encodeURIComponent('Tell me about '+detail.title)">Ask me about this project <svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a><p v-if="detail.id==='katha'" class="development-note">KATHA is still being developed. The card motifs on this portfolio are decorative covers, not final gameplay cards.</p></div></div></dialog>
+  </dialog>
 </template>
