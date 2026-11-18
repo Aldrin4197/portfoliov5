@@ -25,9 +25,9 @@ const limit = ref(pageSize)
 watch([search, filter], () => { limit.value = pageSize })
 const visible = computed(() => filtered.value.slice(0, limit.value))
 const offers = [
-  { title: 'Build a web or mobile product', copy: 'Give customers a place to find, compare, or book what you offer. I build the interface and the system behind it.', project: 'aadi' },
-  { title: 'Simplify a team workflow', copy: 'Replace scattered requests and manual follow-ups with a tool your team can use to track each task from intake to resolution.', project: 'ssu-helpdesk' },
-  { title: 'Design a match broadcast', copy: 'Give viewers a clear read on the draft, the score, and the standout player with OBS graphics tailored to your event.', project: 'overlays' },
+  { title: 'Web & mobile apps', copy: 'Help customers find and book your services.', project: 'aadi' },
+  { title: 'Internal tools', copy: 'Track requests from intake to resolution.', project: 'ssu-helpdesk' },
+  { title: 'Esports overlays', copy: 'Keep drafts, scores, and MVPs clear on stream.', project: 'overlays' },
 ].map(offer => ({ ...offer, example: catalog.find(p => p.id === offer.project)! }))
 const detail = ref<CatalogProject | null>(null)
 const dialog = ref<HTMLDialogElement | null>(null)
@@ -61,17 +61,17 @@ const tools = [{name:'Frontend',items:'Vue · React · JavaScript · HTML & CSS'
         <div class="intro-copy">
           <p class="byline"><i aria-hidden="true"></i> Full-stack developer / Catbalogan, PH</p>
           <h1 id="intro-title">Aldrin Jay<br><em>Delos Reyes.</em></h1>
-          <p class="lede">I help teams turn everyday problems into software people can use. Whether you need a booking site, an internal tracking tool, or graphics for match day, I can take it from the first sketch to a working build.</p>
+          <p class="lede">I build apps that simplify daily work and design broadcast graphics that help fans follow the match.</p>
           <div class="actions"><a class="button" href="#contact">Discuss your project ↗</a><a class="inline-link" href="#projects">Explore my work ↓</a></div>
         </div>
         <figure class="hero-portrait"><img :src="portrait" alt="Graduation portrait of Aldrin Jay Delos Reyes" width="820" height="1063" fetchpriority="high"></figure>
       </div>
     </section>
     <section id="services" class="offer-section wrap">
-      <h2>What I can build for you<span class="dot">.</span></h2>
+      <h2>What I offer<span class="dot">.</span></h2>
       <div class="offer-grid"><article v-for="offer in offers" :key="offer.title">
         <h3>{{ offer.title }}</h3><p>{{ offer.copy }}</p>
-        <button class="proof-link" @click="inspect(offer.example)">See {{ offer.example.title }} ↗</button>
+        <button class="proof-link" @click="inspect(offer.example)">{{ offer.example.title }} ↗</button>
       </article></div>
     </section>
     <section id="projects" class="work wrap">
