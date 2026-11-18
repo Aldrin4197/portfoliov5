@@ -15,7 +15,7 @@ export interface CatalogProject {
 
 // Last documented work or project snapshot. Dates are not release dates.
 const recentActivity: Record<string, string> = {
-  katha: '2026-11', aadi: '2026-11', color: '2026-11', esports: '2026-11',
+  overlays: '2026-11-17', katha: '2026-11', aadi: '2026-11', color: '2026-11', esports: '2026-11',
   game: '2026-11', stria: '2026-11', amari: '2026-03-24',
 }
 

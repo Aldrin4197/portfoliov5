@@ -121,3 +121,11 @@ h1 em,h2 em { font-family:inherit; font-weight:inherit; font-style:normal; color
 @media(max-width:960px) { .gallery { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media(max-width:760px) { .hero .intro { gap:0; }.hero-portrait img { height:clamp(240px,65vw,350px); }.intro-copy { padding-block:32px 12px; }.hero-portrait { width:min(360px,100%); justify-self:center; }.search-field input { width:100%; } }
 @media(max-width:560px) { .gallery { grid-template-columns:minmax(0,1fr); } }
+
+.cover.overlays {
+  padding: 8%;
+  background: repeating-linear-gradient(120deg, transparent 0 14px, #ffffff08 15px 16px), linear-gradient(110deg,#10182b 48%,#23395c 48%);
+}
+.broadcast-cover { width:100%; border-block:2px solid #5291ff; padding:5% 2%; display:grid; gap:4px; color:#f4f7ff; }
+.broadcast-cover i,.broadcast-cover span { font:11px var(--mono); text-transform:uppercase; letter-spacing:.1em; }
+.broadcast-cover i { color:#ffac9c; }.broadcast-cover b { font:700 clamp(32px,4vw,65px)/1 Condensed,sans-serif; text-transform:uppercase; }

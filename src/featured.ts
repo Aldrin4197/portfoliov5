@@ -5,5 +5,14 @@ export const projects = [
  { id:'esports', title:'Catbalogan City Esports', short:'City Esports', category:'Web apps', label:'Local roots. Next-level play.', description:'A website for Catbalogan City Esports, bringing its events, broadcasting services, and local gaming community into one home.', image:'esports', color:'#3973dc', tags:['Community','Esports','Website'], status:'Featured project' },
  { id:'color', title:'Color Game + Message Room', short:'Color Game', category:'Games', label:'A little play. A shared room.', description:'A browser-based color game with a message room. An experiment in bringing a familiar Filipino game and conversation into a shared digital space.', image:'color', color:'#a965b2', tags:['Browser game','Message room','Beta'], status:'Beta' },
  { id:'amari', title:'Amari’s Photobooth', short:'Amari’s', category:'Web apps', label:'A moment worth keeping.', description:'A web photobooth built for Amari. Open the live project to try it.', image:'', color:'#c97c91', tags:['Photobooth','Web experience'], status:'Live site', url:'https://amarisphotobooth.drindlr.com' },
- { id:'katha', title:'KATHA', short:'KATHA', category:'Tabletop', label:'Philippine folklore. Your next adventure.', description:'A tabletop card-and-board game inspired by Philippine folklore. Creatures, alamat, agimat, and pangyayari come together in a world of stories, strategy, and discovery. Currently in development, with a digital playtest prototype.', image:'', color:'#b18a42', tags:['Philippine folklore','Tabletop','In development'], status:'In development' },
+ { id:'katha', title:'KATHA', short:'KATHA', category:'Tabletop', label:'Philippine folklore. Your next adventure.', description:'I design the cards, board, and rules for KATHA, a tabletop game rooted in Philippine folklore. Players follow trails, encounter creatures, and use agimat as they move across a shared board.', image:'', color:'#b18a42', tags:['Philippine folklore','Tabletop','In development'], status:'In development' },
+ {
+   id: 'overlays',
+   title: 'OBS Broadcast Overlays',
+   category: 'Broadcast design',
+   description: 'I design on-screen graphics for Mobile Legends: Bang Bang (MLBB), Dota 2, and Valorant broadcasts. My MLBB work includes draft layouts, killstreak graphics, and post-game MVP screens that help viewers follow a match.',
+   tags: ['OBS Studio', 'Esports broadcasting', 'MLBB', 'Dota 2', 'Valorant'],
+   status: 'Design collection',
+   image: '',
+ },
 ]

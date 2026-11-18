@@ -8,12 +8,14 @@ import HackathonsSection from './sections/HackathonsSection/HackathonsSection.vu
 
 import portrait from './assets/me.png'
 const katha = catalog.find(p => p.id === 'katha')!
+const creativeCategories = ['Tabletop', 'Broadcast design']
 const filter = ref('All projects')
 const search = ref('')
 const filtered = computed(() => {
   const query = search.value.trim().toLowerCase()
   return catalog.filter(p =>
-    (filter.value === 'All projects' || p.category === filter.value) &&
+    (filter.value === 'All projects' || p.category === filter.value ||
+      (filter.value === 'Non-dev projects' && creativeCategories.includes(p.category))) &&
     [p.title, p.description, ...p.tags].join(' ').toLowerCase().includes(query)
   )
 })
@@ -58,7 +60,7 @@ const tools = [{name:'Frontend',items:'Vue · React · JavaScript · HTML & CSS'
     <div class="stack-strip"><div class="wrap"><span>Core stack</span><b>Laravel</b><b>Vue.js</b><b>Flutter</b><b>MySQL</b></div></div>
     <section id="projects" class="work wrap">
       <div class="section-head"><h2>Project catalog<span class="dot">.</span></h2><label class="search-field">Search projects<input v-model="search" type="search" placeholder="Name, tool, or keyword"></label></div>
-      <div class="catalog-controls"><div class="filters" aria-label="Project categories"><button v-for="category in ['All projects','Web apps','Mobile','Games','Tabletop','Hardware']" :key="category" :aria-pressed="category === filter" @click="filter = category">{{ category }}</button></div>
+      <div class="catalog-controls"><div class="filters" aria-label="Project categories"><button v-for="category in ['All projects','Web apps','Mobile','Games','Hardware','Tabletop','Non-dev projects']" :key="category" :aria-pressed="category === filter" @click="filter = category">{{ category }}</button></div>
       <small aria-live="polite">{{ filtered.length }} of {{ catalog.length }} · Latest activity first</small></div>
       <p v-if="!filtered.length" class="empty">No matching projects. <button @click="search = ''; filter = 'All projects'">Reset filters</button></p>
       <div class="gallery">
@@ -67,18 +69,19 @@ const tools = [{name:'Frontend',items:'Vue · React · JavaScript · HTML & CSS'
             <span class="cover" :class="project.id">
               <img v-if="project.image" :src="project.image" alt="" loading="lazy"/>
               <span v-else-if="project.id === 'katha'" class="foil">KATHA</span>
+              <span v-else-if="project.id === 'overlays'" class="broadcast-cover" aria-hidden="true"><i>● ON AIR</i><b>Matchday</b><span>Broadcast overlays</span></span>
               <span v-else class="photobooth">Amari’s <i>Photobooth</i></span>
             </span>
             <span class="entry-title">{{ project.title }}<span aria-hidden="true">↗</span></span>
           </button>
-          <p>{{ activityLabel(project.activity) }} · {{ project.category }}<span v-if="['color','katha'].includes(project.id)"> · {{ project.status }}</span></p>
+          <p>{{ activityLabel(project.activity) }} · <template v-if="creativeCategories.includes(project.category)">Non-dev / </template>{{ project.category }}<span v-if="['color','katha'].includes(project.id)"> · {{ project.status }}</span></p>
           <div class="catalog-desc">{{ project.description }}</div>
         </article>
       </div>
     </section>
     <section id="katha" class="feature">
       <div class="wrap feature-inner">
-        <div><p class="byline">Tabletop game in development</p><h2>KATHA</h2><p class="feature-copy">I’m turning Philippine folklore into a game you can gather around. Players encounter creatures, legends, and events across a shared board. A digital prototype lets me playtest each change.</p><button class="feature-link" @click="inspect(katha)">Explore the game ↗</button></div>
+        <div><p class="byline">Non-dev project / Tabletop design</p><h2>KATHA</h2><p class="feature-copy">I’m turning Philippine folklore into a game you can gather around. Players encounter creatures, legends, and events across a shared board. I design the card effects and the routes that connect locations, then refine the rules through playtesting.</p><button class="feature-link" @click="inspect(katha)">Explore the game ↗</button></div>
         <div class="deck" aria-hidden="true"><div class="playing-card"></div><div class="playing-card"></div><div class="playing-card"><span>KATHA</span><b>✷</b><span>Philippine folklore</span></div></div>
       </div>
     </section>
