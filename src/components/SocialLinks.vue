@@ -2,8 +2,8 @@
 const profiles = [
   { name: 'GitHub', href: 'https://github.com/Aldrin4197' },
   { name: 'LinkedIn', href: 'https://www.linkedin.com/in/aldrin-jay-delos-reyes-559817267/' },
-  { name: 'CodePen', href: '' },
-  { name: 'Instagram', href: '' },
+  { name: 'CodePen', href: 'https://codepen.io/Aldrin-Jay-Delos-Reyes' },
+  { name: 'Instagram', href: 'https://www.instagram.com/arudurin_jei/' },
   { name: 'Gmail', href: 'mailto:aldrinjay.delosreyes17@gmail.com' },
 ]
 </script>
