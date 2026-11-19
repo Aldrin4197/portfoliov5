@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import type { CatalogProject } from '../catalog'
+import { kathaCards } from '../katha'
 import ArrowUpRight from './ArrowUpRight.vue'
 
-const props = defineProps<{ project: CatalogProject }>()
-const selected = ref(0)
+const props = defineProps<{ project: CatalogProject; initialIndex: number }>()
+const selected = ref(props.initialIndex)
 const media = computed(() => {
   const { id, title, artwork, image } = props.project
+  if (id === 'katha') return kathaCards
   const items: { label: string; src: string; alt: string }[] = []
   if (artwork) {
     const isPoster = ['perchwise', 'aadi', 'stria'].includes(id)
@@ -38,6 +40,7 @@ const active = computed(() => media.value[selected.value])
       </div>
       <a class="full-size" :href="active.src" target="_blank" rel="noopener">Full size <ArrowUpRight /></a>
     </figcaption>
+    <p v-if="project.id === 'katha' && kathaCards[selected]" class="card-rules"><strong>{{ kathaCards[selected]?.ability }}.</strong> {{ kathaCards[selected]?.text }}</p>
   </figure>
 </template>
 
@@ -51,4 +54,6 @@ figcaption { justify-content:space-between; margin-top:.6rem; }
 .views button[aria-pressed=true] { color:var(--accent); background:#19363d; }
 .views button:hover, .full-size:hover { color:var(--accent); }
 .full-size { margin-left:auto; }
+.card-rules { font-size:14px; margin-top:8px; }
+.card-rules strong { color:var(--bright); }
 </style>

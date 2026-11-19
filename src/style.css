@@ -94,3 +94,18 @@ dialog{background:#162337;color:var(--text);max-width:670px;width:calc(100% - 28
   .hover-list { --gutter:10px; }
   .review-grid small { display:block; margin-left:0; }
 }
+
+.career-jump { align-self:flex-start; margin:14px 0 4px; font-size:14px; font-weight:600; }
+.career-jump:is(:hover,:focus-visible) { color:var(--accent); text-decoration:underline; text-underline-offset:4px; }
+.katha-cards { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(8px,1.2vw,18px); padding:20px 0 1px; }
+.katha-cards button { display:grid; gap:7px; min-width:0; text-align:start; border-radius:5px; }
+.katha-cards img { width:100%; height:auto; border-radius:5px; box-shadow:0 2px 7px #070b134a; transition:transform 160ms ease,box-shadow 160ms ease; }
+.katha-cards span { font-size:13px; font-weight:600; }
+.katha-cards button:is(:hover,:focus-visible) { color:var(--accent); }
+.katha-cards button:is(:hover,:focus-visible) img { transform:translateY(-3px); box-shadow:0 4px 15px #080c155c; }
+.history { gap:32px; }
+.history .eyebrow { display:none; }
+.history .section-heading,.history #experience h2 { text-transform:none; letter-spacing:normal; font-size:17px; }
+.history .hack-grid { grid-template-columns:repeat(auto-fit,minmax(min(100%,205px),1fr)); }
+.history .cert-header { flex-wrap:wrap; }
+@media(prefers-reduced-motion:reduce) { .katha-cards button:is(:hover,:focus-visible) img { transform:none; } }
