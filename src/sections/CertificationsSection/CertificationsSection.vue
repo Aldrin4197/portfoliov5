@@ -34,8 +34,8 @@ const certs = [
       <p class="eyebrow">Certifications</p>
       <h2 class="section-heading">Credentials</h2>
 
-      <div class="cert-list">
-        <div v-for="(cert, i) in certs" :key="i" class="cert-item">
+      <div class="cert-list hover-list">
+        <div v-for="(cert, i) in certs" :key="i" class="cert-item hover-row">
           <img :src="cert.logo" :alt="cert.issuer" class="cert-logo" />
           <div class="cert-body">
             <div class="cert-header">
@@ -53,17 +53,10 @@ const certs = [
 
 <style scoped>
 .cert-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
   margin-top: 20px;
 }
 
 .cert-item {
-  padding: 16px 18px;
-  border-radius: 14px;
-  border: 1px solid rgba(236, 238, 244, 0.08);
-  background: rgba(255, 255, 255, 0.03);
   display: flex;
   gap: 14px;
   align-items: flex-start;
@@ -118,5 +111,8 @@ const certs = [
   color: rgba(236, 238, 244, 0.5);
   line-height: 1.5;
   margin: 0;
+}
+@media (hover: hover) and (pointer: fine) {
+  .cert-item:hover .cert-header strong { color: var(--accent); }
 }
 </style>
