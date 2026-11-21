@@ -47,8 +47,8 @@ const detail = ref<CatalogProject | null>(null)
 const initialMedia = ref(0)
 const dialog = ref<HTMLDialogElement | null>(null)
 const sections = [
-  { id: 'about', label: 'About' }, { id: 'services', label: 'Services' },
-  { id: 'projects', label: 'Projects' }, { id: 'stack', label: 'Toolkit' },
+  { id: 'about', label: 'About' }, { id: 'projects', label: 'Projects' },
+  { id: 'services', label: 'Services' }, { id: 'stack', label: 'Toolkit' },
   { id: 'career', label: 'Background' }, { id: 'reviews', label: 'Reviews' }, { id: 'contact', label: 'Contact' },
 ]
 const active = ref('about')
@@ -99,7 +99,6 @@ onBeforeUnmount(() => { document.body.style.overflow = '' })
       </div>
       <a class="career-jump" href="#career">Experience, education &amp; credentials ↓</a>
     </section>
-    <ServicesSection @inspect="inspect" />
     <section id="projects" class="work wrap">
       <div class="section-head"><h2 ref="projectHeading" tabindex="-1">{{ archiveOpen ? 'Project archive' : 'Featured projects' }}</h2><label v-if="archiveOpen" class="search-field">Search projects<input v-model="search" type="search" placeholder="Name, tool, or keyword"></label></div>
       <div v-if="archiveOpen" class="catalog-controls"><div class="filters" aria-label="Project categories"><button v-for="category in ['All projects','Web apps','Mobile','Games','Hardware','Tabletop','Non-dev projects']" :key="category" :aria-pressed="category === filter" @click="filter = category">{{ category }}</button></div>
@@ -145,6 +144,7 @@ onBeforeUnmount(() => { document.body.style.overflow = '' })
       </div>
       <button class="feature-link" @click="inspect(katha)">Explore the game <ArrowUpRight /></button>
     </section>
+    <ServicesSection @inspect="inspect" />
     <TechStackSection />
     <section id="career" aria-labelledby="career-title">
       <h2 id="career-title">Experience, education &amp; credentials</h2>
@@ -158,6 +158,11 @@ onBeforeUnmount(() => { document.body.style.overflow = '' })
     <section id="contact" class="contact"><div class="wrap"><h2>What are you working on?</h2><div><p>Tell me what you’re trying to make easier. A few lines about your team and your timeline are plenty.</p><a class="button" href="mailto:aldrinjay.delosreyes17@gmail.com">Email me <ArrowUpRight /></a></div></div></section>
   </main>
   </div>
+  <footer class="site-footer">
+    <p>© {{ new Date().getFullYear() }} Aldrin Jay Delos Reyes</p>
+    <SocialLinks />
+    <a href="#home">Back to top <span aria-hidden="true">↑</span></a>
+  </footer>
   <dialog ref="dialog" aria-labelledby="detail-title" @close="afterClose" @click="event => { if(event.target === dialog) closeDialog() }">
     <div v-if="detail" class="dialog-content"><button class="close" autofocus @click="closeDialog" aria-label="Close project">Close ×</button>
       <ProjectMedia :key="detail.id + initialMedia" :project="detail" :initial-index="initialMedia" />
@@ -167,3 +172,27 @@ onBeforeUnmount(() => { document.body.style.overflow = '' })
     </div>
   </dialog>
 </template>
+
+<style scoped>
+.site-footer {
+  width: min(1130px, 88%);
+  margin-inline: auto;
+  padding-block: 22px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 24px;
+  font-size: 14px;
+}
+.site-footer p { margin-inline-end: auto; }
+.site-footer a { padding-block: 8px; }
+.site-footer a:is(:hover, :focus-visible) { color: var(--accent); }
+@media (max-width: 830px), (max-height: 610px) {
+  .site-footer { width: min(640px, 88%); }
+}
+@media (max-width: 540px) {
+  .site-footer p { flex-basis: 100%; }
+  .site-footer > a { margin-inline-start: auto; }
+}
+</style>
