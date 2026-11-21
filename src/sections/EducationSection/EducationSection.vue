@@ -34,8 +34,8 @@ const education = [
       <p class="eyebrow">Education</p>
       <h2 class="section-heading">Academic Background</h2>
 
-      <div class="edu-list">
-        <div v-for="(edu, i) in education" :key="i" class="edu-item">
+      <div class="edu-list hover-list">
+        <div v-for="(edu, i) in education" :key="i" class="edu-item hover-row">
           <div class="edu-icon"><img :src="edu.logo" :alt="edu.school" class="edu-logo" /></div>
           <div class="edu-body">
             <a :href="edu.link" target="_blank" rel="noopener" class="edu-school">{{ edu.school }}</a>
@@ -50,19 +50,12 @@ const education = [
 
 <style scoped>
 .edu-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
   margin-top: 24px;
 }
 
 .edu-item {
   display: flex;
   gap: 16px;
-  padding: 18px 20px;
-  border-radius: 14px;
-  border: 1px solid rgba(236, 238, 244, 0.08);
-  background: rgba(255, 255, 255, 0.03);
 }
 
 .edu-icon {
@@ -85,13 +78,14 @@ const education = [
 .edu-school {
   font-weight: 700;
   font-size: 1rem;
-  color: #9eb1ff;
+  color: var(--bright);
   text-decoration: none;
   transition: color 180ms ease;
 }
 
-.edu-school:hover {
-  color: #c4d2ff;
+.edu-item:focus-within .edu-school { color: var(--accent); }
+@media (hover: hover) and (pointer: fine) {
+  .edu-item:hover .edu-school { color: var(--accent); }
 }
 
 .edu-degree {
