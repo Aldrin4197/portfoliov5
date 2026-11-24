@@ -5,7 +5,9 @@ const groups = [
   { name: 'Frontend', tools: [['Vue','vuedotjs'], ['React','react'], ['JavaScript','javascript'], ['HTML','html5'], ['CSS','css']] },
   { name: 'Mobile', tools: [['Flutter','flutter']] },
   { name: 'Backend', tools: [['Laravel','laravel'], ['PHP','php'], ['Node.js','nodedotjs'], ['REST APIs','api']] },
-  { name: 'Data', tools: [['MySQL','mysql'], ['PostgreSQL','postgresql'], ['MongoDB','mongodb']] },
+  { name: 'Data', tools: [['MySQL','mysql'], ['PostgreSQL','postgresql'], ['MongoDB','mongodb'], ['Supabase']] },
+  { name: 'Game development', tools: [['Godot'], ['RPG Maker']] },
+  { name: 'AI automation', tools: [['n8n'], ['Zapier']] },
   { name: 'Hardware', tools: [['Arduino','arduino'], ['Raspberry Pi','raspberrypi'], ['Embedded systems','chip']] },
   { name: 'Design & production', tools: [['Figma','figma'], ['OBS Studio','obsstudio']] },
 ]
@@ -18,8 +20,8 @@ const groups = [
       <div v-for="group in groups" :key="group.name" class="tool-group">
         <dt>{{ group.name }}</dt>
         <dd><ul>
-          <li v-for="[name, id] in group.tools" :key="id">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use :href="marks+'#'+id" /></svg>
+          <li v-for="[name, id] in group.tools" :key="name">
+            <svg v-if="id" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use :href="marks+'#'+id" /></svg>
             {{ name }}
           </li>
         </ul></dd>

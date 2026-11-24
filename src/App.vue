@@ -87,15 +87,13 @@ onBeforeUnmount(() => { document.body.style.overflow = '' })
   <a class="skip" href="#main">Skip to content</a>
   <div class="shell" id="home"><header class="profile">
     <div><h1>Aldrin Jay <br>Delos Reyes</h1><p class="role">Full-stack developer</p>
-    <p class="lede">I build apps for your business, tools for your team, and graphics for your next broadcast.</p></div>
+    <p class="lede">I’m an engineer turned developer who enjoys solving everyday problems with technology. I love gaming, create livestream assets for Catbalogan’s esports community, and am working on a game of my own.</p></div>
     <nav aria-label="Section navigation"><a v-for="section in sections" :key="section.id" :href="'#'+section.id" :aria-current="active === section.id ? 'location' : undefined">{{ section.label }}</a></nav>
     <div class="signature"><div><small>Catbalogan, Philippines</small><SocialLinks /></div></div>
   </header><main id="main">    <section id="about" class="about wrap">
       <div><h2>About</h2><a class="inline-link" href="mailto:aldrinjay.delosreyes17@gmail.com?subject=CV%20request">Request my CV <ArrowUpRight /></a></div>
-      <div class="about-copy"><p class="statement">Show me how your team works. I’ll help you build a simpler way to handle the parts that slow you down.</p>
-
-        <p>I’ve taken this approach at Samar State University, building tools for employee records, document tracking, and support requests.</p>
-
+      <div class="about-copy">
+        <p>I’ve built tools at Samar State University to help staff manage employee records, track documents, and handle support requests.</p>
       </div>
       <a class="career-jump" href="#career">Experience, education &amp; credentials ↓</a>
     </section>
