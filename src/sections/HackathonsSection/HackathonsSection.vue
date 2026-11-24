@@ -47,8 +47,8 @@ const hackathons = [
         the endless possibilities brought to life by a group of motivated and passionate individuals."
       </blockquote>
 
-      <div class="hack-grid">
-        <article v-for="h in hackathons" :key="h.title" class="hack-card">
+      <div class="hack-grid hover-list">
+        <article v-for="h in hackathons" :key="h.title" class="hack-card hover-row">
           <div class="hack-img-wrap">
             <img :src="h.img" :alt="h.title" class="hack-img" loading="lazy" />
           </div>
@@ -86,18 +86,9 @@ const hackathons = [
 }
 
 .hack-card {
-  border-radius: 16px;
-  border: 1px solid rgba(236, 238, 244, 0.08);
-  background: rgba(255, 255, 255, 0.03);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: border-color 200ms ease, background 200ms ease;
-}
-
-.hack-card:hover {
-  border-color: rgba(158, 177, 255, 0.2);
-  background: rgba(158, 177, 255, 0.04);
 }
 
 .hack-img-wrap {
@@ -114,12 +105,12 @@ const hackathons = [
   transition: transform 400ms ease;
 }
 
-.hack-card:hover .hack-img {
-  transform: scale(1.04);
+@media (hover: hover) and (pointer: fine) {
+  .hack-card:hover .hack-img { transform: scale(1.04); }
 }
 
 .hack-body {
-  padding: 16px 18px;
+  padding: 12px 0 0;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -165,5 +156,8 @@ const hackathons = [
 
 @media (max-width: 600px) {
   .hack-grid { grid-template-columns: 1fr; }
+}
+@media (hover: hover) and (pointer: fine) {
+  .hack-card:hover .hack-title { color: var(--accent); }
 }
 </style>
